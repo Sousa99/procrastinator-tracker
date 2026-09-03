@@ -1,0 +1,26 @@
+@baseUrl = http://localhost:3000
+
+### List all tags
+GET {{baseUrl}}/api/tags
+
+### Duplicate tag (expect 409)
+POST {{baseUrl}}/api/tags
+Content-Type: application/json
+
+{
+  "name": "Chores"
+}
+
+### List all users
+GET {{baseUrl}}/api/users
+
+### Duplicate user (expect 409)
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+
+{
+  "name": "Alex"
+}
+
+### Delete a user
+DELETE {{baseUrl}}/api/users/1
