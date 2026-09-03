@@ -7,7 +7,7 @@ Phase 1 output. A runnable validation guide proving the feature works end-to-end
 
 ## Prerequisites
 
-- Node.js 22 LTS, pnpm (9+)
+- Node.js 24 LTS, pnpm 11
 - VSCode with the **REST Client** extension (for the `.http` validation flows)
 - PostgreSQL not required — SQLite is used locally (`data/procrastinator.db`)
 

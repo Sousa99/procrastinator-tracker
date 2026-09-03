@@ -20,7 +20,7 @@ light-mood, motivating task view.
 
 ## Technical Context
 
-**Language/Version**: TypeScript / Node 22 LTS (both backend and frontend)
+**Language/Version**: TypeScript / Node 24 LTS, pnpm 11 (both backend and frontend)
 
 **Primary Dependencies**:
 - Backend: `hono`, `@hono/zod-openapi`, `zod`, `drizzle-orm`, `better-sqlite3`,
