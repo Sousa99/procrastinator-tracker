@@ -1,5 +1,10 @@
 # MCP Contract: Task Tracker Core
 
+> **Superseded (transport)**: this contract describes the original stdio-based MCP design
+> from feature 001. Feature [002](../../002-mcp-http-transport/contracts/mcp.md) replaced
+> the transport with **streamable HTTP** and is now the current MCP transport. The tool
+> definitions below remain authoritative for tool names and schemas.
+
 Phase 1 output. The MCP server runs the same backend codebase in `mcp` mode (dual-mode
 entry, see [plan.md](../plan.md)). It exposes the task domain as MCP **tools** over the
 stdio transport using the MCP TypeScript SDK v2 (`@modelcontextprotocol/server` +

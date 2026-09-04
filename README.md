@@ -17,8 +17,9 @@ optional location and urgency (1–5), recurring tasks, and status-aware comment
 | Tooling  | pnpm 11, TypeScript, ESLint (flat config), Prettier, Vitest |
 
 The backend is a single codebase with a **dual-mode entry**: `--http` serves the REST API,
-`--mcp` runs the MCP server over stdio. Both modes share the same service/db layer — no
-separate backend packages.
+`--mcp` serves the MCP server over **streamable HTTP** (see
+[feature 002](specs/002-mcp-http-transport/)). Both modes share the same service/db layer
+— no separate backend packages.
 
 ## Prerequisites
 
@@ -38,17 +39,20 @@ pnpm db:migrate    # apply migrations (creates the SQLite database)
 | Mode | Command | Notes |
 |------|---------|-------|
 | REST API + Swagger | `pnpm --filter backend start` | http://localhost:3000 · OpenAPI at `/doc` · Swagger UI at `/ui` |
-| MCP server | `pnpm --filter backend start:mcp` | JSON-RPC over stdin/stdout (stdio); log to stderr only |
+| MCP server (HTTP) | `pnpm --filter backend start:mcp` | Streamable HTTP MCP at http://localhost:3001/mcp (`MCP_PORT`) |
+| MCP auto-reload (dev) | `pnpm --filter backend dev:mcp` | Same, but `tsx watch` reloads on source edits |
 | Frontend (dev) | `pnpm --filter frontend dev` | http://localhost:5173, proxies `/api` to the backend |
 | Both together | `pnpm dev` | REST + frontend via `concurrently` |
 
 Both backend modes share `backend/data/procrastinator.db` (SQLite WAL allows concurrent
-access). To run REST and MCP simultaneously, start two instances of the same process.
+access). To run REST and MCP simultaneously, start two instances of the same process —
+which also means you can restart the MCP process without affecting the REST API.
 
 ## Documentation
 
-- **Specs**: `specs/001-task-tracker-core/` — `spec.md`, `plan.md`, `research.md`,
-  `data-model.md`, `contracts/` (REST + MCP contracts), `quickstart.md`, `tasks.md`.
+- **Specs**: `specs/001-task-tracker-core/` — spec, plan, research, data-model, contracts,
+  quickstart, tasks. `specs/002-mcp-http-transport/` — MCP HTTP transport (spec, plan,
+  research, contracts, quickstart, tasks).
 - **API contract**: served at `/doc` (OpenAPI 3.0) with interactive Swagger UI at `/ui`.
 - **Endpoint validation**: VSCode REST Client files in `backend/http/*.http`.
 
@@ -67,6 +71,34 @@ All four MUST pass before commit/merge (see the project constitution).
 
 `task.create`, `task.list`, `task.get`, `task.update`, `task.set_status`,
 `task.comment`, `task.delete`, `tag.list`, `user.list`.
+
+## Connecting opencode
+
+The repo's `opencode.json` registers the tracker as a **remote** MCP server:
+
+```json
+{
+  "mcp": {
+    "procrastinator-tracker": {
+      "type": "remote",
+      "url": "http://localhost:3001/mcp",
+      "enabled": true
+    }
+  }
+}
+```
+
+Start the MCP process (`pnpm --filter backend start:mcp` or `dev:mcp`), then opencode
+connects on its next start. **Reloading MCP code needs no opencode restart**: restart the
+MCP process (or let `dev:mcp` reload on save) and opencode picks it up on the next tool
+call. See [feature 002 contracts](specs/002-mcp-http-transport/contracts/mcp.md).
+
+**Deployed**: same config shape — swap `url` and add auth headers:
+
+```json
+{ "type": "remote", "url": "https://your-server.example/mcp",
+  "headers": { "Authorization": "Bearer {env:MCP_TOKEN}" } }
+```
 
 ## Governance
 

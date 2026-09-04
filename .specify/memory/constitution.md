@@ -1,9 +1,9 @@
 <!--
-Sync Impact Report (2026-09-03)
-- Version change: (unversioned template) -> 1.0.0
-- Modified principles: N/A (initial authoring; all five template placeholders filled)
-- Added sections: Additional Constraints (Practicality & Scope), Development Workflow &
-  Quality Gates, Governance rules
+Sync Impact Report (2026-09-04)
+- Version change: 1.0.0 -> 1.1.0
+- Modified principles: N/A (no principle redefined)
+- Added sections: Governance — Feature Spec History rule (append-only specs,
+  supersession pointers, sequential reading)
 - Removed sections: N/A
 - Follow-up TODOs: None
 -->
@@ -68,4 +68,12 @@ new principles or expanded guidance, PATCH for clarifications). Compliance MUST 
 in every workflow: quality gates are the enforcement mechanism, and any deviation must be
 addressed by amending this document, not by bypassing it.
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-03 | **Last Amended**: 2026-09-03
+**Feature Spec History**: Feature directories under `specs/NNN-<name>/` are append-only
+records of each feature's design and MUST be read sequentially (001 → 002 → ...) to
+understand evolution. A later feature that changes an earlier design MUST document the
+delta in its own spec and MUST add a non-destructive supersession pointer atop the earlier
+spec — it MUST NOT rewrite or delete the earlier spec's content. "Living documentation"
+(Principle V) applies to docs describing the CURRENT system (README, quickstart, the
+latest feature's contracts); feature specs are history and are never rewritten in place.
+
+**Version**: 1.1.0 | **Ratified**: 2026-09-03 | **Last Amended**: 2026-09-04

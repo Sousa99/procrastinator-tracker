@@ -1,5 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js';
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 import { z } from 'zod';
 import type { DB } from '../db/client';
 import { HttpError } from '../domain/errors';
@@ -60,7 +62,7 @@ export function createMcpServer(db: DB) {
       },
     },
     async (args) => {
-      const task = createTask(db, {
+      const task = await createTask(db, {
         title: args.title,
         description: args.description,
         location: args.location,
@@ -102,7 +104,7 @@ export function createMcpServer(db: DB) {
         finished: args.finished,
         recurring: args.recurring,
       };
-      const tasks = listTasks(db, filters);
+      const tasks = await listTasks(db, filters);
       return { content: [{ type: 'text', text: JSON.stringify(tasks) }] };
     },
   );
@@ -115,7 +117,7 @@ export function createMcpServer(db: DB) {
       inputSchema: { id: z.number().int() },
     },
     async (args) => {
-      const task = getTask(db, args.id);
+      const task = await getTask(db, args.id);
       return { content: [{ type: 'text', text: JSON.stringify(task) }] };
     },
   );
@@ -139,7 +141,7 @@ export function createMcpServer(db: DB) {
       },
     },
     async (args) => {
-      const task = updateTask(db, args.id, {
+      const task = await updateTask(db, args.id, {
         title: args.title,
         description: args.description,
         location: args.location,
@@ -166,7 +168,7 @@ export function createMcpServer(db: DB) {
       inputSchema: { id: z.number().int(), status: taskStatusSchema },
     },
     async (args) => {
-      const task = setStatus(db, args.id, args.status);
+      const task = await setStatus(db, args.id, args.status);
       return { content: [{ type: 'text', text: JSON.stringify(task) }] };
     },
   );
@@ -179,7 +181,7 @@ export function createMcpServer(db: DB) {
       inputSchema: { id: z.number().int(), body: z.string().min(1) },
     },
     async (args) => {
-      const comment = addTaskComment(db, args.id, args.body);
+      const comment = await addTaskComment(db, args.id, args.body);
       return { content: [{ type: 'text', text: JSON.stringify(comment) }] };
     },
   );
@@ -226,9 +228,18 @@ export function createMcpServer(db: DB) {
   return server;
 }
 
-export async function runMcpServer(db: DB) {
+export function createMcpHttpApp(db: DB) {
   const server = createMcpServer(db);
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  return server;
+  const transport = new WebStandardStreamableHTTPServerTransport({
+    sessionIdGenerator: () => crypto.randomUUID(),
+    enableJsonResponse: true,
+  });
+  const ready = server.connect(transport);
+
+  const app = new Hono();
+  app.use('/mcp', cors());
+  app.all('/mcp', (c) => transport.handleRequest(c.req.raw));
+  app.get('/health', (c) => c.json({ status: 'ok' }));
+
+  return { app, ready };
 }
