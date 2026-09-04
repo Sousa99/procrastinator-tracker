@@ -1,9 +1,10 @@
 <!--
 Sync Impact Report (2026-09-04)
-- Version change: 1.0.0 -> 1.1.0
+- Version change: 1.0.0 -> 1.1.0 (previous) -> 1.2.0
 - Modified principles: N/A (no principle redefined)
 - Added sections: Governance — Feature Spec History rule (append-only specs,
-  supersession pointers, sequential reading)
+  supersession pointers, sequential reading); Development Workflow & Quality Gates —
+  IDE/TypeScript parity + dependency hygiene rules
 - Removed sections: N/A
 - Follow-up TODOs: None
 -->
@@ -59,6 +60,16 @@ daily velocity.
 - Review (self-review or PR) MUST focus on correctness, clarity, and whether complexity is
   justified — not on formatting.
 - Build the simplest thing that works, then expand incrementally.
+- **IDE/TypeScript parity**: the typecheck gate runs the workspace TypeScript (pinned in
+  `package.json`/`typescript.tsdk`). The IDE MUST use that same workspace TypeScript (see
+  `.vscode/settings.json`); spurious IDE type errors that do not reproduce in `tsc` are a
+  toolchain mismatch to fix by aligning the IDE TS (and restarting the TS server), not by
+  ignoring them.
+- **Dependency hygiene**: dependency upgrades MUST be followed by `pnpm install`/`pnpm
+  dedupe`, and the resolved dependency graph MUST contain a single instance of each
+  critical package (e.g. `pnpm ls drizzle-orm` shows exactly one). Duplicate instances are
+  the top cause of phantom type errors. After any dependency or config change, restart the
+  IDE TypeScript server.
 
 ## Governance
 
@@ -76,4 +87,4 @@ spec — it MUST NOT rewrite or delete the earlier spec's content. "Living docum
 (Principle V) applies to docs describing the CURRENT system (README, quickstart, the
 latest feature's contracts); feature specs are history and are never rewritten in place.
 
-**Version**: 1.1.0 | **Ratified**: 2026-09-03 | **Last Amended**: 2026-09-04
+**Version**: 1.2.0 | **Ratified**: 2026-09-03 | **Last Amended**: 2026-09-04

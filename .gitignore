@@ -29,7 +29,8 @@ Thumbs.db
 *.tmp
 *.swp
 .idea/
-.vscode/
+.vscode/*
+!.vscode/settings.json
 
 # pnpm
 .pnpm-store/
