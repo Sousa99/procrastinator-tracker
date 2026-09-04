@@ -1,0 +1,90 @@
+@baseUrl = http://localhost:3000
+
+### Health check
+GET {{baseUrl}}/health
+
+### OpenAPI document
+GET {{baseUrl}}/doc
+
+### Create a user
+# @name createUser
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+
+{
+  "name": "Alex"
+}
+
+### Create a tag
+# @name createTag
+POST {{baseUrl}}/api/tags
+Content-Type: application/json
+
+{
+  "name": "chores"
+}
+
+### Create a task
+# @name createTask
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Water the plants",
+  "description": "All rooms",
+  "status": "to-start",
+  "location": "Home",
+  "urgency": 4,
+  "tags": ["chores"],
+  "assigneeIds": [{{createUser.response.body.$.id}}]
+}
+
+### List tasks (active only)
+GET {{baseUrl}}/api/tasks
+
+### List tasks filtered by tag
+GET {{baseUrl}}/api/tasks?tag=chores
+
+### Get a task
+GET {{baseUrl}}/api/tasks/{{createTask.response.body.$.id}}
+
+### Start a task (valid transition)
+# @name startTask
+POST {{baseUrl}}/api/tasks/{{createTask.response.body.$.id}}/status
+Content-Type: application/json
+
+{
+  "status": "started"
+}
+
+### Try invalid transition (expect 409)
+POST {{baseUrl}}/api/tasks/{{createTask.response.body.$.id}}/status
+Content-Type: application/json
+
+{
+  "status": "finished"
+}
+
+### Add a comment to an on-hold task
+POST {{baseUrl}}/api/tasks/{{createTask.response.body.$.id}}/status
+Content-Type: application/json
+
+{
+  "status": "on-hold"
+}
+
+### Comment
+POST {{baseUrl}}/api/tasks/{{createTask.response.body.$.id}}/comments
+Content-Type: application/json
+
+{
+  "body": "Blocked: need the hose"
+}
+
+### Finish the task
+POST {{baseUrl}}/api/tasks/{{createTask.response.body.$.id}}/status
+Content-Type: application/json
+
+{
+  "status": "validating"
+}

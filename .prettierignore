@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+coverage/
+data/
+drizzle/
+*.db
+*.md
+pnpm-lock.yaml
+.gitignore
+.env
+.env.*
+.specify/
+specs/

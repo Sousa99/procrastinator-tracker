@@ -1,0 +1,33 @@
+{
+  "name": "procrastinator-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-first task tracker with REST + MCP backend and a React SPA frontend",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,green \"pnpm --filter backend dev\" \"pnpm --filter frontend dev\"",
+    "dev:mcp": "pnpm --filter backend dev:mcp",
+    "start": "pnpm --filter backend start",
+    "start:mcp": "pnpm --filter backend start:mcp",
+    "db:generate": "pnpm --filter backend db:generate",
+    "db:migrate": "pnpm --filter backend db:migrate",
+    "db:studio": "pnpm --filter backend db:studio",
+    "lint": "eslint .",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "concurrently": "^9.1.0",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.4.0",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.18.0"
+  }
+}

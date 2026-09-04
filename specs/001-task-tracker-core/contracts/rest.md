@@ -40,6 +40,7 @@ truth; it is implemented as an OpenAPI 3.0 document via `@hono/zod-openapi` and 
   "location": "Home",
   "urgency": 4,
   "dueDate": "2026-09-04",
+  "parentTaskId": null,
   "recurrence": { "frequency": "daily", "interval": 1 },
   "tags": ["chores"],
   "assignees": [1],
