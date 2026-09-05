@@ -1,6 +1,15 @@
 import { sqliteTable, text, integer, primaryKey, index } from 'drizzle-orm/sqlite-core';
 import { relations } from 'drizzle-orm';
-import { TASK_STATUSES, type TaskStatus } from '../domain/status';
+
+export const TASK_STATUSES = [
+  'to-start',
+  'started',
+  'in-progress',
+  'on-hold',
+  'validating',
+  'finished',
+] as const;
+export type TaskStatus = (typeof TASK_STATUSES)[number];
 
 export const RECURRENCE_FREQUENCIES = ['daily', 'weekly', 'monthly'] as const;
 export type RecurrenceFrequency = (typeof RECURRENCE_FREQUENCIES)[number];

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
 import { createDb } from '../../src/db/client';
-import { createMcpHttpApp } from '../../src/adapters/mcp';
+import { createMcpHttpApp } from '../../src/mcp';
 
 const INITIALIZE = {
   jsonrpc: '2.0',

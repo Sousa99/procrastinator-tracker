@@ -1,15 +1,10 @@
-export const TASK_STATUSES = [
-  'to-start',
-  'started',
-  'in-progress',
-  'on-hold',
-  'validating',
-  'finished',
-] as const;
+import type { TaskStatusDto } from '../models/task';
 
-export type TaskStatus = (typeof TASK_STATUSES)[number];
-
-export const TRANSITIONS: Record<TaskStatus, readonly TaskStatus[]> = {
+/**
+ * Defines the valid transitions between task statuses.
+ * Each key represents a current status, and its value is an array of valid next statuses.
+ */
+export const TRANSITIONS: Record<TaskStatusDto, readonly TaskStatusDto[]> = {
   'to-start': ['started'],
   started: ['in-progress', 'on-hold', 'to-start'],
   'in-progress': ['on-hold', 'validating', 'started'],
@@ -18,10 +13,12 @@ export const TRANSITIONS: Record<TaskStatus, readonly TaskStatus[]> = {
   finished: ['started'],
 };
 
-export function isValidTransition(from: TaskStatus, to: TaskStatus): boolean {
+/**
+ * Checks if transitioning from one task status to another is valid based on the defined transitions.
+ * @param from - The current task status.
+ * @param to - The desired next task status.
+ * @returns True if the transition is valid, false otherwise.
+ */
+export function isValidTransition(from: TaskStatusDto, to: TaskStatusDto): boolean {
   return TRANSITIONS[from].includes(to);
-}
-
-export function isTaskStatus(value: string): value is TaskStatus {
-  return (TASK_STATUSES as readonly string[]).includes(value);
 }

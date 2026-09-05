@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { serve } from '@hono/node-server';
 import { createDb } from './db/client';
 import { createApp } from './app';
-import { createMcpHttpApp } from './adapters/mcp';
+import { createMcpHttpApp } from './mcp';
 
 const mode = process.argv.includes('--mcp') ? 'mcp' : 'http';
 
