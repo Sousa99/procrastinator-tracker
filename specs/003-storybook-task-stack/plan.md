@@ -1,6 +1,6 @@
 # Implementation Plan: Storybook + Exportable TaskStack Component
 
-**Branch**: `003-storybook-task-stack` | **Date**: 2026-09-06 | **Spec**: [spec.md](spec.md)
+**Branch**: `feature/003-storybook-task-stack` | **Date**: 2026-09-06 | **Spec**: [spec.md](spec.md)
 
 **Input**: Feature specification from `/specs/003-storybook-task-stack/spec.md`
 

@@ -1,6 +1,6 @@
 # Feature Specification: Storybook + Exportable TaskStack Component
 
-**Feature Branch**: `003-storybook-task-stack`
+**Feature Branch**: `feature/003-storybook-task-stack`
 
 **Created**: 2026-09-06
 
