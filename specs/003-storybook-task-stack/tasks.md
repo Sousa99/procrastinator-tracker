@@ -35,9 +35,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T007 Create `frontend/src/index.ts` library barrel exporting `TaskStack`, `TaskStackWrapper`, and types `Task`, `TaskStatus`, `TaskFilters`, `TaskStackProps`, `TaskStackWrapperProps` (re-exported from `api/client.ts`; NO app-only modules)
-- [ ] T008 [P] Create `frontend/src/components/task/TaskStack.fixtures.ts` with `sampleTasks: Task[]` covering all statuses, varied urgency/tags/assignees/due dates
-- [ ] T009 Update `frontend/tsconfig.json` to include `.storybook` config and the library entry (`src/index.ts`) in typecheck scope
+- [X] T007 Create `frontend/src/index.ts` library barrel exporting the shared types `Task`, `TaskStatus`, `TaskFilters`, `Task`, `TaskFilters` etc. (re-exported from `api/client.ts`; NO app-only modules). `TaskStack`/`TaskStackWrapper`/prop-type exports are added in US1 when the components exist.
+- [X] T008 [P] Create `frontend/src/components/task/TaskStack.fixtures.ts` with `sampleTasks: Task[]` covering all statuses, varied urgency/tags/assignees/due dates
+- [X] T009 Update `frontend/tsconfig.json` to include `.storybook` config and the library entry (`src/index.ts`) in typecheck scope
 
 **Checkpoint**: Foundation ready — user story implementation can now begin in parallel.
 
