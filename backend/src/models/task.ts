@@ -78,8 +78,8 @@ export const taskCreateSchema = z.object({
   urgency: z.number().int().min(1).max(5).optional(),
   tags: z.array(z.string()).optional(),
   assigneeIds: z.array(z.number().int()).optional(),
-  dueDate: z
-    .iso.datetime()
+  dueDate: z.iso
+    .datetime()
     .transform((s) => new Date(s))
     .optional(),
   recurrence: taskRecurrenceSchema.optional(),
@@ -96,8 +96,8 @@ export const taskUpdateSchema = z.object({
   urgency: z.number().int().min(1).max(5).nullable().optional(),
   tags: z.array(z.string()).optional(),
   assigneeIds: z.array(z.number().int()).optional(),
-  dueDate: z
-    .iso.datetime()
+  dueDate: z.iso
+    .datetime()
     .transform((s) => new Date(s))
     .nullable()
     .optional(),

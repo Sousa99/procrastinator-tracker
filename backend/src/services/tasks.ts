@@ -1,14 +1,6 @@
 import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
 import type { DB } from '../db/client';
-import {
-  recurrenceRules,
-  tags,
-  taskAssignees,
-  taskTags,
-  tasks,
-  type RecurrenceFrequency,
-  type Task,
-} from '../db/schema';
+import { recurrenceRules, tags, taskAssignees, taskTags, tasks, type Task } from '../db/schema';
 import { HttpError, notFound } from '../domain/errors';
 import { isValidTransition } from '../domain/status';
 import { addComment } from './comments';
@@ -265,7 +257,7 @@ export async function listTasks(db: DB, filters: TaskFiltersDto = {}): Promise<T
     conds.push(sql`${tasks.parentTaskId} is null`);
   };
 
-  let conds: ReturnType<typeof sql>[] = [];
+  const conds: ReturnType<typeof sql>[] = [];
   addStatusFilter(conds);
   addTagFilter(conds);
   addAssigneeFilter(conds);
