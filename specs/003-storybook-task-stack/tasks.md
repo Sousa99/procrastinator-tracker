@@ -51,14 +51,14 @@
 
 ### Tests for User Story 1
 
-- [ ] T010 [P] [US1] Unit test `TaskStack` display behavior in `frontend/tests/task-stack.test.tsx`: renders one card per task, cards overlap (stacked classes present), filters reorder/emphasize correctly, `maxVisible` caps cards
-- [ ] T011 [P] [US1] Unit test `TaskStackWrapper` refresh semantics in `frontend/tests/task-stack-wrapper.test.tsx`: fetches on mount via `dataSource`, refetches on `refreshRateMs` interval, no overlapping in-flight requests, interval cleaned up on unmount/change, `refreshRateMs: 0` fetches once, error and empty states render
+- [X] T010 [P] [US1] Unit test `TaskStack` display behavior in `frontend/tests/task-stack.test.tsx`: renders one card per task, cards overlap (stacked classes present), filters reorder/emphasize correctly, `maxVisible` caps cards
+- [X] T011 [P] [US1] Unit test `TaskStackWrapper` refresh semantics in `frontend/tests/task-stack-wrapper.test.tsx`: fetches on mount via `dataSource`, refetches on `refreshRateMs` interval, no overlapping in-flight requests, interval cleaned up on unmount/change, `refreshRateMs: 0` fetches once, error and empty states render
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create `frontend/src/components/task/TaskStack.tsx` — presentational stacked-deck component per `data-model.md` (`tasks`, `filters`, `renderCard?`, `maxVisible?`, `className?`), reusing `TaskCard` as default card, urgency-descending order with unset last
-- [ ] T013 [P] [US1] Create `frontend/src/components/task/TaskStackWrapper.tsx` — self-fetching wrapper per `data-model.md` (`filters`, `refreshRateMs` default 30000, `dataSource?` default `api.listTasks`, forwards `maxVisible`/`renderCard`/`className`), interval-based refetch with in-flight guard, loading/error/empty states, cleanup on unmount
-- [ ] T014 [US1] Create `frontend/src/components/task/TaskStack.stories.tsx` — `Default` and `Filtered` stories with `sampleTasks` fixtures + controls for the display; `SelfFetchingWrapper` story with mocked `dataSource` and `refreshRateMs` control (per `contracts/storybook.md`)
+- [X] T012 [P] [US1] Create `frontend/src/components/task/TaskStack.tsx` — presentational stacked-deck component per `data-model.md` (`tasks`, `filters`, `renderCard?`, `maxVisible?`, `className?`), router-free default card (styled like TaskCard but no react-router Link, keeping the package exportable), urgency-descending order with unset last, client-side filter matching
+- [X] T013 [P] [US1] Create `frontend/src/components/task/TaskStackWrapper.tsx` — self-fetching wrapper per `data-model.md` (`filters`, `refreshRateMs` default 30000, `dataSource?` default `api.listTasks`, forwards `maxVisible`/`renderCard`/`className`), interval-based refetch with in-flight guard, loading/error/empty states, cleanup on unmount
+- [X] T014 [US1] Create `frontend/src/components/task/TaskStack.stories.tsx` + `TaskStackWrapper.stories.tsx` — `Default`, `Filtered`, `Capped`, `CustomCard` stories with `sampleTasks` fixtures + controls; self-fetching wrapper story with mocked `dataSource` and `refreshRateMs` control (per `contracts/storybook.md`)
 
 **Checkpoint**: At this point, User Story 1 is fully functional and testable independently.
 
