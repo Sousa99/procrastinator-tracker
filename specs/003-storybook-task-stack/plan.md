@@ -106,9 +106,9 @@ specs/003-storybook-task-stack/
 ```text
 frontend/
 ├── .storybook/
-│   ├── main.ts          # NEW: stories glob, @storybook/react-vite, addons, viteFinal (tailwind)
-│   └── preview.ts       # NEW: import ../src/index.css (Tailwind v4); decorators
-├── vite.lib.config.ts   # NEW: library-mode build (ESM+CJS) + vite-plugin-dts -> dist/
+│   ├── main.ts          # NEW: stories glob, @storybook/react-vite, viteFinal (tailwind)
+│   └── preview.ts       # NEW: import ../src/index.css (Tailwind v4)
+├── vite.lib.config.ts   # NEW: library-mode build (ESM) + vite-plugin-dts -> dist-lib/
 ├── src/
 │   ├── components/task/
 │   │   ├── TaskStack.tsx         # NEW: presentational stacked-deck display (pure)
@@ -120,6 +120,9 @@ frontend/
 ├── package.json                  # MODIFY: storybook scripts, library build, exports, peerDeps
 └── tsconfig.json                 # MODIFY (if needed): include .storybook, lib entry
 ```
+
+Build outputs: SPA app → `dist-app/` (`vite.config.ts` `outDir`), Storybook static →
+`dist-storybook/` (`-o dist-storybook`), library → `dist-lib/` (`vite.lib.config.ts`).
 
 **Structure Decision**: No new package — the component and its wrapper live in the existing
 `frontend/src/components/task/` directory alongside `TaskCard`. The library build uses a
@@ -139,10 +142,13 @@ Resolve the integration specifics:
 
 - Storybook 9 + `@storybook/react-vite` compatibility with React 19, Vite 6, and Tailwind v4
   (via the `@tailwindcss/vite` plugin, referenced in `viteFinal`; preview imports
-  `../src/index.css`).
-- Vite library mode for exporting a React component package: entry, ESM/CJS formats,
+  `../src/index.css`). In Storybook 9 the essentials addons (controls, actions, viewport) are
+  built into core — no `@storybook/addon-essentials` package is required.
+- Vite library mode for exporting a React component package: entry, ESM format,
   `external: ['react', 'react-dom', 'react/jsx-runtime']`, `vite-plugin-dts` for type
-  declarations, and the `package.json` `exports` map + `files` + `peerDependencies`.
+  declarations, and the `package.json` `exports` map + `files` + `peerDependencies`. Build
+  outputs are segregated: `dist-app/` (SPA), `dist-storybook/` (Storybook static),
+  `dist-lib/` (library package).
 - `TaskStack` component design: display (pure) + self-fetching wrapper; `filters` and
   `refreshRateMs` props; interval cleanup; in-flight-request handling; error/empty states.
 - Package validation tooling: `publint` and `@arethetypeswrong/cli --pack`.

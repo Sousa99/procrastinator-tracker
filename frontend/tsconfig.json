@@ -7,5 +7,12 @@
     "moduleDetection": "force",
     "noEmit": true
   },
-  "include": ["src", "tests", "vite.config.ts", "vitest.config.ts"]
+  "include": [
+    "src",
+    "tests",
+    ".storybook",
+    "vite.config.ts",
+    "vite.lib.config.ts",
+    "vitest.config.ts"
+  ]
 }

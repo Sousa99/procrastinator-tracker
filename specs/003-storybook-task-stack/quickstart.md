@@ -31,7 +31,7 @@ pnpm --filter frontend storybook
 
 ```bash
 pnpm --filter frontend build:lib
-# -> frontend/dist/ (ESM + bundled .d.ts)
+# -> frontend/dist-lib/ (ESM + bundled .d.ts)
 ```
 
 Then validate the export contract:
@@ -42,7 +42,7 @@ npx publint
 npx @arethetypeswrong/cli --pack
 ```
 
-**Expected**: `dist/` contains `index.js` + `index.d.ts` (and `styles.css` if shipped);
+**Expected**: `dist-lib/` contains `index.js` + `index.d.ts` (and `styles.css` if shipped);
 `publint` reports no missing/invalid `exports` fields; `attw` resolves types from every
 consumer perspective with no errors.
 

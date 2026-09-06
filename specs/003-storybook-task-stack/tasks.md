@@ -20,12 +20,12 @@
 
 **Purpose**: Project initialization — Storybook workbench, library-build tooling, and package manifest wiring.
 
-- [ ] T001 Install Storybook + library-build dev dependencies in `frontend/package.json`: `storybook@9`, `@storybook/react-vite`, `@storybook/addon-essentials`, `vite-plugin-dts`
-- [ ] T002 [P] Create `frontend/.storybook/main.ts` with `@storybook/react-vite` framework, `stories` glob `../src/**/*.stories.@(ts|tsx)`, `@storybook/addon-essentials`, and `viteFinal` adding the `@tailwindcss/vite` plugin (per `contracts/storybook.md`)
-- [ ] T003 [P] Create `frontend/.storybook/preview.ts` importing `../src/index.css` (Tailwind v4 single source of truth)
-- [ ] T004 [P] Add `storybook` (`storybook dev -p 6006`) and `build-storybook` (`storybook build`) scripts to `frontend/package.json`
-- [ ] T005 [P] Create `frontend/vite.lib.config.ts`: Vite library mode, entry `src/index.ts`, formats `['es']`, `rollupOptions.external` for `react`, `react-dom`, `react/jsx-runtime`, `lucide-react`, with `vite-plugin-dts` (`rollupTypes: true`) emitting to `frontend/dist/`
-- [ ] T006 [P] Update `frontend/package.json` with `build:lib` script and library export contract: `exports` map, `files: ["dist"]`, `sideEffects: false`, `peerDependencies` for `react`/`react-dom` (and `lucide-react` if default card uses icons) per `contracts/task-stack.md`
+- [X] T001 Install Storybook + library-build dev dependencies in `frontend/package.json`: `storybook@9`, `@storybook/react-vite`, `vite-plugin-dts` (Storybook 9 bundles essentials — no `@storybook/addon-essentials` needed)
+- [X] T002 [P] Create `frontend/.storybook/main.ts` with `@storybook/react-vite` framework, `stories` glob `../src/**/*.stories.@(ts|tsx)`, and `viteFinal` adding the `@tailwindcss/vite` plugin (per `contracts/storybook.md`)
+- [X] T003 [P] Create `frontend/.storybook/preview.ts` importing `../src/index.css` (Tailwind v4 single source of truth)
+- [X] T004 [P] Add `storybook` (`storybook dev -p 6006`) and `build-storybook` (`storybook build -o dist-storybook`) scripts to `frontend/package.json`
+- [X] T005 [P] Create `frontend/vite.lib.config.ts`: Vite library mode, entry `src/index.ts`, formats `['es']`, `rollupOptions.external` for `react`, `react-dom`, `react/jsx-runtime`, `lucide-react`, with `vite-plugin-dts` (`bundleTypes: true`) emitting to `frontend/dist-lib/`
+- [X] T006 [P] Update `frontend/package.json` with `build:lib` script and library export contract: `exports` map, `files: ["dist-lib"]`, `sideEffects: false`, `peerDependencies` for `react`/`react-dom` (and `lucide-react` if default card uses icons) per `contracts/task-stack.md`
 
 ---
 
@@ -83,11 +83,11 @@
 
 **Goal**: The frontend package produces a consumable library build so `TaskStackWrapper` (full component with retrieval) can be installed and used in other React 19 products.
 
-**Independent Test**: `pnpm --filter frontend build:lib` → `dist/` passes `npx publint` and `npx @arethetypeswrong/cli --pack`; a consumer imports the built wrapper with a mocked `dataSource` and renders the deck (SC-003, SC-004).
+**Independent Test**: `pnpm --filter frontend build:lib` → `dist-lib/` passes `npx publint` and `npx @arethetypeswrong/cli --pack`; a consumer imports the built wrapper with a mocked `dataSource` and renders the deck (SC-003, SC-004).
 
 ### Implementation for User Story 3
 
-- [ ] T017 [P] [US3] Verify `pnpm --filter frontend build:lib` emits `frontend/dist/` (ESM `index.js` + bundled `index.d.ts`) with no SPA `index.html`/app-only code leaking into the package
+- [ ] T017 [P] [US3] Verify `pnpm --filter frontend build:lib` emits `frontend/dist-lib/` (ESM `index.js` + bundled `index.d.ts`) with no SPA `index.html`/app-only code leaking into the package
 - [ ] T018 [US3] Run `npx publint` and `npx @arethetypeswrong/cli --pack` against the built package and fix any `exports`/type-resolution errors in `frontend/package.json` or `vite.lib.config.ts` (per `contracts/task-stack.md`)
 
 **Checkpoint**: The package is installable/consumable; publishing to a registry remains a documented follow-up.

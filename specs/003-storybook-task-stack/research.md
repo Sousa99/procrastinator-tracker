@@ -12,7 +12,9 @@ considered**.
 `@storybook/react-vite` is the official Vite framework — it merges the project's `vite.config`
 defaults with Storybook's own builder config, so Tailwind v4 (via the `@tailwindcss/vite`
 plugin) works with minimal setup. React 19 support was completed in the Storybook 9 release
-line (tracked in storybookjs/storybook#29805).
+line (tracked in storybookjs/storybook#29805). In Storybook 9 the essentials addons (controls,
+actions, viewport, …) are built into core, so no `@storybook/addon-essentials` package is
+needed.
 
 **Alternatives considered**: Storybook 8 (older, works but not the current line and less
 friction-free with Tailwind v4), Ladle (lighter but not a general component workbench and
@@ -37,10 +39,12 @@ a separate `tailwind.config.js` — Tailwind v4 defaults to CSS-first config (`@
 ## 3. Library-mode export of the component package
 
 **Decision**: Vite **library mode** in a dedicated `vite.lib.config.ts` + `vite-plugin-dts`
-for type declarations. `package.json` gains an `exports` map, `files: ["dist"]`, and
-`peerDependencies` for `react`/`react-dom`. Output is ESM (+ optionally CJS).
+for type declarations. `package.json` gains an `exports` map, `files: ["dist-lib"]`, and
+`peerDependencies` for `react`/`react-dom`. Output is ESM (+ optionally CJS). Three distinct
+output dirs keep concerns separate: SPA app → `dist-app/`, Storybook static →
+`dist-storybook/`, library → `dist-lib/`.
 
-**Rationale**: The frontend is currently an SPA build (`vite build` → `dist/` with
+**Rationale**: The frontend is currently an SPA build (`vite build` → `dist-app/` with
 `index.html`). Library mode is the standard, low-ceremony way to also produce a consumable
 package from the same source; `vite-plugin-dts` emits `.d.ts` without a separate api-extractor
 step. Keeping it in a separate config file means the SPA dev/build is untouched. This matches
@@ -54,7 +58,7 @@ present for Storybook).
 - `rollupOptions.external: ['react', 'react-dom', 'react/jsx-runtime', 'lucide-react']` so
   consumers don't get a second copy of React.
 - `vite-plugin-dts` with `rollupTypes: true` to emit a single declaration bundle.
-- `package.json` `exports["."]`: `{ types, import }` → `dist/*.d.ts` / `dist/*.js`.
+- `package.json` `exports["."]`: `{ types, import }` → `dist-lib/*.d.ts` / `dist-lib/*.js`.
 - `peerDependencies`: `react`, `react-dom` (and `lucide-react` if the display component's
   default card rendering uses icons).
 
@@ -136,7 +140,7 @@ unexercised in the real app; rejected.
 |---|----------|----------|
 | 1 | Storybook version/framework | `storybook@9` + `@storybook/react-vite` |
 | 2 | Tailwind v4 integration | `@tailwindcss/vite` in `viteFinal`; preview imports `src/index.css` |
-| 3 | Package export | Vite library mode (`vite.lib.config.ts`) + `vite-plugin-dts`; `exports`/`files`/`peerDependencies` |
+| 3 | Package export | Vite library mode (`vite.lib.config.ts`) + `vite-plugin-dts`; `exports`/`files`/`peerDependencies`; outputs `dist-lib/` (app → `dist-app/`, storybook → `dist-storybook/`) |
 | 4 | Component architecture | Presentational `TaskStack` + self-fetching `TaskStackWrapper` (exported), injectable `dataSource`, interval-based refresh |
 | 5 | Package validation | `npx publint` + `npx @arethetypeswrong/cli --pack` |
 | 6 | Storybook styling | Reuse `src/index.css` (one Tailwind source) |

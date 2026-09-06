@@ -51,7 +51,7 @@ emphasis only (actual filtering happens at fetch time in the wrapper).
 ## Library build & `package.json` contract
 
 Build command: `pnpm --filter frontend build:lib` (Vite library mode, `vite.lib.config.ts` +
-`vite-plugin-dts`). Outputs ESM JS + bundled `.d.ts` into `frontend/dist/`.
+`vite-plugin-dts`). Outputs ESM JS + bundled `.d.ts` into `frontend/dist-lib/`.
 
 ```jsonc
 // frontend/package.json (target shape — reconciled with the existing SPA build)
@@ -59,17 +59,17 @@ Build command: `pnpm --filter frontend build:lib` (Vite library mode, `vite.lib.
   "name": "@procrastinator-tracker/frontend",
   "version": "0.1.0",
   "type": "module",
-  "main": "./dist/index.js",               // ESM (workspace is ESM-only)
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist-lib/index.js",               // ESM (workspace is ESM-only)
+  "module": "./dist-lib/index.js",
+  "types": "./dist-lib/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist-lib/index.d.ts",
+      "import": "./dist-lib/index.js"
     },
-    "./styles.css": "./dist/styles.css"     // emitted Tailwind CSS if shipped
+    "./styles.css": "./dist-lib/styles.css"     // emitted Tailwind CSS if shipped
   },
-  "files": ["dist"],
+  "files": ["dist-lib"],
   "sideEffects": false,
   "peerDependencies": {
     "react": "^19.0.0",
@@ -83,10 +83,9 @@ Notes:
 
 - The library entry is a new `src/index.ts` barrel exporting only the component family and its
   types — **not** app-only modules (`main.tsx`, `App.tsx`, pages).
-- The existing SPA build (`vite build` → app `dist/`) is unchanged; the library build uses the
-  dedicated `vite.lib.config.ts`. A concrete `dist` layout for both must not collide (the SPA
-  build keeps `index.html`; the lib build is a pure package). Implementation picks the exact
-  output dirs (e.g. `dist/lib` for the package) during Phase 2.
+- Three distinct build output dirs keep concerns separate: SPA app → `dist-app/` (via
+  `vite.config.ts` `outDir`), Storybook static → `dist-storybook/` (via `-o dist-storybook` on
+  `build-storybook`), library → `dist-lib/` (via `vite.lib.config.ts` `outDir`). No collision.
 - `peerDependencies` avoid duplicate-React hazards in consumers.
 - Validation before treating the package as consumable: `npx publint` and
   `npx @arethetypeswrong/cli --pack` must pass (see quickstart).

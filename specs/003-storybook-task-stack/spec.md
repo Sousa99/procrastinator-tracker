@@ -69,7 +69,7 @@ into my own React app, because it self-fetches and is exportable as a package.
 which can be installed and used in other products". P2 because publishing to a registry is a
 later step; the local build/consumption contract is validated now.
 
-**Independent Test**: `pnpm --filter frontend build` produces a consumable `dist` with types
+**Independent Test**: `pnpm --filter frontend build` produces a consumable `dist-lib` with types
 and an `exports` map; a smoke-import test imports `TaskStack` from the built package and
 renders it with a mocked data source.
 
@@ -134,7 +134,7 @@ they render.
   render the display component; the exported public component MUST be this full
   "display + retrieval" wrapper.
 - **FR-006**: The frontend package MUST be configured for library-mode export (Vite library
-  mode + `vite-plugin-dts`) producing a consumable `dist` with an `exports` map, `files`,
+  mode + `vite-plugin-dts`) producing a consumable `dist-lib/` with an `exports` map, `files`,
   and React/ReactDOM as `peerDependencies`, so the component can be installed and used in
   other products.
 - **FR-007**: The display component and its props MUST be documented via Storybook stories
@@ -152,7 +152,7 @@ they render.
 - **TaskStack (wrapper / exported)**: Owns retrieval through `api.listTasks(filters)` on a
   `refreshRateMs` interval; renders the display component with loading/error/empty states.
 - **Storybook**: The isolated component workbench; `.storybook/` config wiring Tailwind v4.
-- **Library build**: Vite library-mode output (`dist/`) with `exports` map + type declarations,
+- **Library build**: Vite library-mode output (`dist-lib/`) with `exports` map + type declarations,
   making the component installable elsewhere.
 
 ## Success Criteria *(mandatory)*
@@ -163,7 +163,7 @@ they render.
   and refresh-rate controls.
 - **SC-002**: The dashboard renders active tasks as a stacked deck via the TaskStack wrapper
   (fetched from `/api/tasks`).
-- **SC-003**: `pnpm --filter frontend build` produces a package-usable `dist` that passes
+- **SC-003**: `pnpm --filter frontend build:lib` produces a package-usable `dist-lib/` that passes
   `npx publint` and `npx @arethetypeswrong/cli --pack` with no errors.
 - **SC-004**: A consumer can import the `TaskStack` wrapper from the built package and render
   it with a mocked `dataSource`, confirming self-fetching works outside this repo.

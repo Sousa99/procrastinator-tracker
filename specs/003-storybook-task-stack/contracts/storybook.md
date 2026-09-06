@@ -13,7 +13,6 @@ import tailwindcss from '@tailwindcss/vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(ts|tsx)'],
-  addons: ['@storybook/addon-essentials'],
   framework: '@storybook/react-vite',
   viteFinal: (config) => {
     config.plugins = [...(config.plugins ?? []), tailwindcss()];
@@ -23,6 +22,9 @@ const config: StorybookConfig = {
 
 export default config;
 ```
+
+> Storybook 9 note: the essentials addons (controls, actions, viewport, …) are built into core —
+> no `@storybook/addon-essentials` dependency or `addons` array is needed.
 
 ```ts
 // frontend/.storybook/preview.ts
@@ -35,12 +37,13 @@ import '../src/index.css'; // Tailwind v4 — same source of truth as the app
 {
   "scripts": {
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build -o dist-storybook"
   }
 }
 ```
 
-Run from repo root: `pnpm --filter frontend storybook` → http://localhost:6006.
+Run from repo root: `pnpm --filter frontend storybook` → http://localhost:6006. Static build
+output goes to `frontend/dist-storybook/` (SPA app → `dist-app/`, library → `dist-lib/`).
 
 ## Tailwind v4 note
 
