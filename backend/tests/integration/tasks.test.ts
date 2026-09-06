@@ -271,3 +271,45 @@ describe('comments (US5)', () => {
     expect(c.status).toBe(400);
   });
 });
+
+describe('date serialization and query coercion (regression)', () => {
+  it('lists tasks as JSON with date fields as ISO strings', async () => {
+    await createTask({ title: 'Dated', dueDate: '2026-12-01T10:00:00.000Z' });
+    const r = await req('GET', '/api/tasks');
+    expect(r.status).toBe(200);
+    const task = (r.data as Record<string, unknown>[])[0];
+    expect(typeof task?.dueDate).toBe('string');
+    expect(task?.dueDate).toBe('2026-12-01T10:00:00.000Z');
+    expect(typeof task?.createdAt).toBe('string');
+    expect(typeof task?.updatedAt).toBe('string');
+  });
+
+  it('creates a task from a string dueDate and echoes it back', async () => {
+    const task = await createTask({ title: 'Planned', dueDate: '2026-11-15T09:30:00.000Z' });
+    expect((task as unknown as { dueDate: string }).dueDate).toBe('2026-11-15T09:30:00.000Z');
+  });
+
+  it('serializes comment createdAt as a string', async () => {
+    const task = await createTask({ title: 'Commented' });
+    await req('POST', `/api/tasks/${task.id}/comments`, { body: 'Note' });
+    const g = await req('GET', `/api/tasks/${task.id}`);
+    const comment = (g.data as { comments: { createdAt: unknown }[] }).comments[0];
+    expect(typeof comment?.createdAt).toBe('string');
+  });
+
+  it('rejects malformed dueDate strings with 400', async () => {
+    const r = await req('POST', '/api/tasks', { title: 'Bad date', dueDate: 'not-a-date' });
+    expect(r.status).toBe(400);
+  });
+
+  it('coerces finished=false query param and excludes finished tasks', async () => {
+    const task = await createTask({ title: 'Done' });
+    for (const s of ['started', 'in-progress', 'validating', 'finished']) {
+      await progress(task.id, s);
+    }
+    const active = await req('GET', '/api/tasks?finished=false');
+    expect(active.status).toBe(200);
+    const activeTitles = (active.data as { title: string }[]).map((t) => t.title);
+    expect(activeTitles).not.toContain('Done');
+  });
+});

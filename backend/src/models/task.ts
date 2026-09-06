@@ -45,7 +45,7 @@ export const taskCommentSchema = z.object({
   id: z.number().int(),
   body: z.string().min(1),
   status: taskStatusSchema,
-  createdAt: z.date(),
+  createdAt: z.string(),
 });
 
 /**
@@ -58,14 +58,14 @@ export const taskSchema = z.object({
   status: taskStatusSchema,
   location: z.string().nullable(),
   urgency: z.number().int().min(1).max(5).nullable(),
-  dueDate: z.date().nullable(),
+  dueDate: z.string().nullable(),
   parentTaskId: z.number().int().nullable(),
   recurrence: taskRecurrenceSchema.nullable(),
   tags: z.array(z.string()),
   assignees: z.array(taskAssigneeSchema),
   comments: z.array(taskCommentSchema),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
 });
 
 /**
@@ -78,7 +78,10 @@ export const taskCreateSchema = z.object({
   urgency: z.number().int().min(1).max(5).optional(),
   tags: z.array(z.string()).optional(),
   assigneeIds: z.array(z.number().int()).optional(),
-  dueDate: z.date().optional(),
+  dueDate: z
+    .iso.datetime()
+    .transform((s) => new Date(s))
+    .optional(),
   recurrence: taskRecurrenceSchema.optional(),
 });
 
@@ -93,7 +96,11 @@ export const taskUpdateSchema = z.object({
   urgency: z.number().int().min(1).max(5).nullable().optional(),
   tags: z.array(z.string()).optional(),
   assigneeIds: z.array(z.number().int()).optional(),
-  dueDate: z.date().nullable().optional(),
+  dueDate: z
+    .iso.datetime()
+    .transform((s) => new Date(s))
+    .nullable()
+    .optional(),
   recurrence: taskRecurrenceSchema.nullable().optional(),
 });
 
@@ -105,16 +112,24 @@ export const taskDeleteSchema = z.object({
 });
 
 /**
+ * Boolean query param schema that accepts both real booleans (MCP) and
+ * the 'true'/'false' strings that arrive in HTTP query strings.
+ */
+const booleanFilter = z
+  .union([z.boolean(), z.literal('true'), z.literal('false')])
+  .transform((v) => v === true || v === 'true');
+
+/**
  * Task list schema for validation.
  */
 export const taskListFilterSchema = z.object({
   status: taskStatusSchema.optional(),
   tag: z.string().optional(),
-  assignee: z.number().int().optional(),
+  assignee: z.coerce.number().int().optional(),
   urgency: taskUrgencySchema.optional(),
   location: z.string().optional(),
-  finished: z.boolean().optional(),
-  recurring: z.boolean().optional(),
+  finished: booleanFilter.optional(),
+  recurring: booleanFilter.optional(),
 });
 
 /**
@@ -158,7 +173,7 @@ export type TaskUpdateDto = z.infer<typeof taskUpdateSchema>;
 interface TaskRelations {
   tags: TaskTagDto[];
   assignees: TaskAssigneeDto[];
-  comments: TaskCommentDto[];
+  comments: { id: number; body: string; status: TaskStatusDto; createdAt: Date }[];
   recurrenceRule: TaskRecurrenceDto | null;
 }
 

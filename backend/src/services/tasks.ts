@@ -22,7 +22,6 @@ import {
 } from './recurrence';
 import type {
   TaskAssigneeDto,
-  TaskCommentDto,
   TaskCreateDto,
   TaskDto,
   TaskFiltersDto,
@@ -161,7 +160,7 @@ async function loadRelations(
 ): Promise<{
   tags: TaskTagDto[];
   assignees: TaskAssigneeDto[];
-  comments: TaskCommentDto[];
+  comments: { id: number; body: string; status: TaskStatusDto; createdAt: Date }[];
   recurrenceRule: TaskRecurrenceDto | null;
 }> {
   const row = await db.query.tasks.findFirst({
@@ -262,7 +261,7 @@ export async function listTasks(db: DB, filters: TaskFiltersDto = {}): Promise<T
   };
 
   const addRecurringFilter = (conds: ReturnType<typeof sql>[]) => {
-    if (!filters.recurring) return;
+    if (filters.recurring) return;
     conds.push(sql`${tasks.parentTaskId} is null`);
   };
 
@@ -320,12 +319,12 @@ export async function createTask(db: DB, input: TaskCreateDto): Promise<TaskDto>
   const taskValue = {
     title: input.title.trim(),
     description: input.description?.trim() || null,
-    status: 'to-start',
+    status: 'to-start' as const,
     location: input.location?.trim() || null,
     urgency: input.urgency ?? null,
-    dueDate: input.dueDate?.toISOString() ?? null,
-    createdAt: now.toISOString(),
-    updatedAt: now.toISOString(),
+    dueDate: input.dueDate ?? null,
+    createdAt: now,
+    updatedAt: now,
   };
 
   const task = db.insert(tasks).values(taskValue).returning().get();

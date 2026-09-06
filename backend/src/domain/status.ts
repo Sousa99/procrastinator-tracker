@@ -22,3 +22,12 @@ export const TRANSITIONS: Record<TaskStatusDto, readonly TaskStatusDto[]> = {
 export function isValidTransition(from: TaskStatusDto, to: TaskStatusDto): boolean {
   return TRANSITIONS[from].includes(to);
 }
+
+/**
+ * Checks whether a value is a valid task status string.
+ * @param value - The value to check.
+ * @returns True if the value is a valid task status, false otherwise.
+ */
+export function isTaskStatus(value: string): value is TaskStatusDto {
+  return Object.prototype.hasOwnProperty.call(TRANSITIONS, value);
+}

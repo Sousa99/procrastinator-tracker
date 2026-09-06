@@ -1,7 +1,7 @@
 import type { DB } from '../db/client';
 import { comments } from '../db/schema';
 import { HttpError } from '../domain/errors';
-import type { TaskStatus } from '../domain/status';
+import type { TaskStatus } from '../db/schema';
 
 export async function addComment(db: DB, taskId: number, body: string, status: TaskStatus) {
   const trimmed = body.trim();
