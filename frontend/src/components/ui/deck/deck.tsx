@@ -32,6 +32,7 @@ export type DeckCardsProps = HTMLAttributes<HTMLDivElement> & {
   indexChangeDirection?: 'left' | 'right';
   autoRotateMs?: number;
   loop?: boolean;
+  slideDurationMs?: number;
 };
 
 export const DeckCards = ({
@@ -50,6 +51,7 @@ export const DeckCards = ({
   indexChangeDirection = 'left',
   autoRotateMs = 0,
   loop = true,
+  slideDurationMs = 500,
   ...props
 }: DeckCardsProps) => {
   const childrenArray = Children.toArray(children) as ReactElement[];
@@ -87,7 +89,7 @@ export const DeckCards = ({
       setTimeout(() => {
         setExitDirection(null);
         setDisplayIndex(wrapIndex(currentIndex));
-      }, 300);
+      }, slideDurationMs);
     } else {
       // No animation, update display index immediately
       setDisplayIndex(wrapIndex(currentIndex));
@@ -110,9 +112,9 @@ export const DeckCards = ({
         setCurrentIndex(newIndex);
         setDisplayIndex(newIndex);
         setExitDirection(null);
-      }, 300);
+      }, slideDurationMs);
     },
-    [displayIndex, total, onSwipe, onSwipeEnd, setCurrentIndex],
+    [displayIndex, total, onSwipe, onSwipeEnd, setCurrentIndex, slideDurationMs],
   );
 
   const handleSwipe = useCallback(
@@ -164,6 +166,7 @@ export const DeckCards = ({
                 draggingRef.current = dragging;
               }}
               onSwipe={handleSwipe}
+              slideDurationMs={slideDurationMs}
               style={{
                 zIndex,
                 scale: scaleValue,
@@ -192,7 +195,7 @@ export const DeckCards = ({
               scale: scaleValue,
               y: yOffset,
             }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
+            transition={{ duration: slideDurationMs / 1000, ease: 'easeOut' }}
           >
             {child}
           </motion.div>
@@ -209,6 +212,7 @@ type DeckCardProps = {
   style?: object;
   exitDirection: 'left' | 'right' | null;
   onDragStateChange?: (dragging: boolean) => void;
+  slideDurationMs: number;
 };
 
 const DeckCard = ({
@@ -218,6 +222,7 @@ const DeckCard = ({
   style,
   exitDirection,
   onDragStateChange,
+  slideDurationMs,
 }: DeckCardProps) => {
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-25, 25]);
@@ -261,7 +266,7 @@ const DeckCard = ({
         opacity,
         ...style,
       }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
+      transition={{ duration: slideDurationMs / 1000, ease: 'easeOut' }}
       whileDrag={{ scale: 1.05 }}
     >
       {cloneElement(castedChildren, {

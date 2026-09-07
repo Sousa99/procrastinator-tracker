@@ -12,6 +12,7 @@ export interface TaskDeckProps {
   autoRotateMs?: number;
   loop?: boolean;
   stackSize?: number;
+  slideDurationMs?: number;
   renderCard?: (task: Task) => ReactNode;
   onCardChange?: (index: number) => void;
   className?: string;
@@ -58,40 +59,42 @@ export function TaskDeckCard({ task }: { task: Task }) {
         <CardTitle className="flex-1">{task.title}</CardTitle>
         <StatusBadge status={task.status} />
       </CardHeader>
-      <CardContent className="min-h-0 flex-1 space-y-2 overflow-hidden">
+      <CardContent className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {task.description && <p className="line-clamp-2 text-slate-600">{task.description}</p>}
-        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
-          {task.urgency !== null && (
-            <span className="inline-flex items-center gap-1">
-              <Flame className="size-3.5 text-amber-500" />
-              {task.urgency}
-            </span>
+        <div className="mt-auto space-y-2">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
+            {task.urgency !== null && (
+              <span className="inline-flex items-center gap-1">
+                <Flame className="size-3.5 text-amber-500" />
+                {task.urgency}
+              </span>
+            )}
+            {task.location && (
+              <span className="inline-flex items-center gap-1">
+                <MapPin className="size-3.5" />
+                {task.location}
+              </span>
+            )}
+            {task.dueDate && (
+              <span className="inline-flex items-center gap-1">
+                <CalendarDays className="size-3.5" />
+                {new Date(task.dueDate).toLocaleDateString()}
+              </span>
+            )}
+          </div>
+          {task.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {task.tags.map((tag) => (
+                <Badge key={tag}>{tag}</Badge>
+              ))}
+            </div>
           )}
-          {task.location && (
-            <span className="inline-flex items-center gap-1">
-              <MapPin className="size-3.5" />
-              {task.location}
-            </span>
-          )}
-          {task.dueDate && (
-            <span className="inline-flex items-center gap-1">
-              <CalendarDays className="size-3.5" />
-              {new Date(task.dueDate).toLocaleDateString()}
-            </span>
+          {task.assignees.length > 0 && (
+            <div className="text-xs text-slate-500">
+              {task.assignees.map((a) => a.name).join(', ')}
+            </div>
           )}
         </div>
-        {task.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {task.tags.map((tag) => (
-              <Badge key={tag}>{tag}</Badge>
-            ))}
-          </div>
-        )}
-        {task.assignees.length > 0 && (
-          <div className="text-xs text-slate-500">
-            {task.assignees.map((a) => a.name).join(', ')}
-          </div>
-        )}
       </CardContent>
     </Card>
   );
@@ -103,6 +106,7 @@ export function TaskDeck({
   autoRotateMs = 4000,
   loop = true,
   stackSize = 3,
+  slideDurationMs = 500,
   renderCard,
   onCardChange,
   className,
@@ -118,6 +122,7 @@ export function TaskDeck({
         autoRotateMs={autoRotateMs}
         loop={loop}
         onCurrentIndexChange={onCardChange}
+        slideDurationMs={slideDurationMs}
         stackSize={stackSize}
       >
         {visible.map((task) => (

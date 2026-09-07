@@ -18,11 +18,11 @@ new **"to-develop" `TaskDeck` component** that renders tasks as a **swipeable ca
 (top card fully visible, subsequent cards scaled/fanned behind it — Deck Standard 1 / Kibo
 `Deck` style). The deck is **configurable**: which tasks to show (`filters`), how often to
 refresh (`refreshRateMs`), how long before it **auto-rotates** (`autoRotateMs`, default 4s,
-`0` disables), whether it **loops** forever (default true), and how many cards peek in the
-stack (`stackSize`). It is split into a **presentational display component** (props-only) and
-a **data-fetching wrapper** (owns retrieval via the existing `api/client`) — and the
-**exported public component is the full wrapper with retrieval**, so it can be installed and
-used in other products.
+`0` disables), the swipe/exit animation speed (`slideDurationMs`, default 500ms), whether it
+**loops** forever (default true), and how many cards peek in the stack (`stackSize`). It is
+split into a **presentational display component** (props-only) and a **data-fetching wrapper**
+(owns retrieval via the existing `api/client`) — and the **exported public component is the
+full wrapper with retrieval**, so it can be installed and used in other products.
 
 The component lives in and is exported from the existing `@procrastinator-tracker/frontend`
 package (coupled, per user decision) so shared utilities like the api client and the `Task` /

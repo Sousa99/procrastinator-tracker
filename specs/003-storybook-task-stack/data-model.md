@@ -47,6 +47,7 @@ behind it.
 | `autoRotateMs` | `number` | 4000 | interval for auto-advancing the deck; `0` disables; timer pauses during drag and resets after a manual skip |
 | `loop` | `boolean` | true | when true, wrap to the first card instead of showing the empty state |
 | `stackSize` | `number` | 3 | how many cards are visible (top + fanned behind) |
+| `slideDurationMs` | `number` | 500 | duration of the swipe/exit card animation (ms); configurable so the deck can glide slower |
 | `renderCard?` | `(task: Task) => ReactNode` | full card default | optional per-card render override |
 | `onCardChange?` | `(index: number) => void` | — | called when the top card changes (auto or manual) |
 | `className?` | `string` | undefined | passthrough for layout styling |
@@ -59,8 +60,9 @@ backend's urgency ordering semantics).
 
 **Sizing rule**: the deck stage fills the container width (`w-full`) with a fixed max height
 (`h-[24rem]` base, `sm:h-[26rem]`). All cards are uniform (`h-full w-full flex flex-col
-overflow-hidden`) regardless of content; long descriptions ellipsize via `line-clamp-2` and
-`CardContent` is `flex-1 min-h-0 overflow-hidden`.
+overflow-hidden`) regardless of content. Card content is anchored: description at the top,
+meta/tags/assignees pushed to the card bottom (`mt-auto`) so content fills the card; long
+descriptions ellipsize via `line-clamp-2`.
 
 ### TaskDeckWrapper (exported, self-fetching)
 
@@ -74,6 +76,7 @@ products ("the full component with retrieval").
 | `dataSource?` | `(filters: TaskFilters) => Promise<Task[]>` | `api.listTasks` | injectable fetch for consumers/tests |
 | `autoRotateMs` | `number` | 4000 | forwarded to `TaskDeck`; `0` disables auto-rotate |
 | `loop` | `boolean` | true | forwarded to `TaskDeck` |
+| `slideDurationMs` | `number` | 500 | forwarded to `TaskDeck`; swipe/exit animation duration |
 | `stackSize`, `renderCard?`, `className?` | same as display | — | forwarded to `TaskDeck` |
 
 **Behavior / state transitions** (fetch layer):

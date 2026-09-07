@@ -22,6 +22,7 @@ import { TaskDeckWrapper } from '@procrastinator-tracker/frontend';
   autoRotateMs={4000}   // optional, default 4000; 0 disables auto-rotate
   loop                  // optional, default true (cycles forever)
   stackSize={3}         // optional, default 3
+  slideDurationMs={500} // optional, default 500 (swipe/exit animation ms)
   dataSource={async (filters) => myFetch(filters)} // optional, default api.listTasks
   className="w-full"
 />
@@ -35,6 +36,7 @@ import { TaskDeckWrapper } from '@procrastinator-tracker/frontend';
 | `autoRotateMs` | `number` | `4000` | deck auto-advance interval; `0` disables; pauses during drag, resets after manual skip |
 | `loop` | `boolean` | `true` | wrap to first card instead of empty state |
 | `stackSize` | `number` | `3` | visible cards (top + fanned behind) |
+| `slideDurationMs` | `number` | `500` | swipe/exit animation duration in ms (e.g. `800` for a slower glide) |
 | `renderCard` | `(task: Task) => ReactNode` | full card default | per-card render override |
 | `className` | `string` | — | wrapper layout styling |
 
@@ -44,13 +46,15 @@ The deck advances on `autoRotateMs`, loops forever, and resets its timer when th
 card away. Skipping is view-only (no task mutation).
 
 **Sizing**: the deck stage fills the container width (`w-full`) with a fixed max height
-(`h-[24rem]` base, `sm:h-[26rem]`). Cards are uniform regardless of content; long text
-ellipsizes (`line-clamp-2`). Pass `className` to adjust the stage.
+(`h-[24rem]` base, `sm:h-[26rem]`). Cards are uniform regardless of content; card content is
+anchored (description top, meta/tags/assignees bottom) and long text ellipsizes
+(`line-clamp-2`). Pass `className` to adjust the stage. The swipe/exit animation duration is
+configurable via `slideDurationMs`.
 
 ### `TaskDeck` (internal presentational)
 
 ```tsx
-<TaskDeck tasks={tasks} filters={filters} autoRotateMs={4000} loop stackSize={3} renderCard={...} />
+<TaskDeck tasks={tasks} filters={filters} autoRotateMs={4000} loop stackSize={3} slideDurationMs={500} renderCard={...} />
 ```
 
 Pure: `tasks` + options in, swipeable deck out. No fetching, no fetch interval (owns only the

@@ -25,6 +25,7 @@ export function TaskDeckWrapper({
   autoRotateMs = 4000,
   loop = true,
   stackSize = 3,
+  slideDurationMs = 500,
   renderCard,
   onCardChange,
   className,
@@ -103,6 +104,7 @@ export function TaskDeckWrapper({
             autoRotateMs={autoRotateMs}
             loop={loop}
             stackSize={stackSize}
+            slideDurationMs={slideDurationMs}
             renderCard={renderCard}
             onCardChange={onCardChange}
           />

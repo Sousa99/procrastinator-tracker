@@ -10,6 +10,7 @@ const meta = {
     autoRotateMs: 0,
     loop: true,
     stackSize: 3,
+    slideDurationMs: 500,
   },
   argTypes: {
     tasks: { control: false },
@@ -17,6 +18,7 @@ const meta = {
     autoRotateMs: { control: { type: 'number', min: 0, step: 1000 } },
     loop: { control: 'boolean' },
     stackSize: { control: { type: 'number', min: 1, max: 6 } },
+    slideDurationMs: { control: { type: 'number', min: 100, max: 2000, step: 100 } },
   },
 } satisfies Meta<typeof TaskDeck>;
 

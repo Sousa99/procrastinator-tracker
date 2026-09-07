@@ -56,10 +56,11 @@ tree, the same `index.css` emits styles for both app and preview iframe — one 
 - Stories are co-located: `ComponentName.stories.tsx` next to the component.
 - Use `@storybook/react-vite`'s `Meta` / `StoryObj` types.
 - `TaskDeck` story drives props via **controls** (argTypes) so `autoRotateMs`, `loop`,
-  `stackSize`, and `filters` are demonstrable. Because `TaskDeck` is presentational, the story
-  supplies static sample `tasks`; `refreshRateMs` is demonstrated on the **wrapper** story with
-  a mocked `dataSource` (avoids hitting the real API in Storybook). In stories, use
-  `autoRotateMs` sparingly (or `0`) so the deck doesn't spin out from under the preview.
+  `stackSize`, `slideDurationMs`, and `filters` are demonstrable. Because `TaskDeck` is
+  presentational, the story supplies static sample `tasks`; `refreshRateMs` is demonstrated on
+  the **wrapper** story with a mocked `dataSource` (avoids hitting the real API in Storybook).
+  In stories, use `autoRotateMs` sparingly (or `0`) so the deck doesn't spin out from under
+  the preview.
 - Existing custom components get at least a basic story (e.g. `TaskCard.stories.tsx`) with
   representative fixture data.
 

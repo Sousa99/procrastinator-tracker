@@ -154,7 +154,8 @@ they render.
   tasks are shown.
 - **FR-004**: `TaskDeck` MUST accept an `autoRotateMs` prop (default 4000; `0` disables) that
   auto-advances the deck on that cadence; the timer MUST pause during a drag and reset after a
-  manual skip.
+  manual skip. The swipe/exit animation duration MUST be configurable via `slideDurationMs`
+  (default 500).
 - **FR-005**: `TaskDeck` MUST support a `loop` mode (default true) that cycles back to the
   first card instead of showing an empty state.
 - **FR-006**: A data-fetching wrapper MUST own retrieval (via the existing `api/client`) and

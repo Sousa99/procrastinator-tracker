@@ -121,4 +121,24 @@ export const sampleTasks: Task[] = [
     createdAt: '2026-08-30T08:00:00.000Z',
     updatedAt: '2026-09-01T09:00:00.000Z',
   },
+  {
+    id: 7,
+    title: 'Refactor the entire task scheduling engine to support long-running background workers',
+    description:
+      'This is a deliberately long description used to verify the line-clamp ellipsis behavior in the deck cards. It rambles on about the scheduling engine, worker pools, backpressure handling, retry policies with exponential backoff, circuit breakers, and the observability instrumentation that must be added so that we can trace every job from enqueue to completion without losing any state across process restarts. The text keeps going past two lines so the deck card has to truncate it with an ellipsis instead of growing beyond the uniform card height.',
+    status: 'in-progress',
+    location: 'Engineering lab',
+    urgency: 5,
+    dueDate: '2026-09-20T09:00:00.000Z',
+    parentTaskId: null,
+    recurrence: null,
+    tags: ['backend', 'scheduling', 'observability'],
+    assignees: [
+      { id: 1, name: 'Alex' },
+      { id: 2, name: 'Sam' },
+    ],
+    comments: [],
+    createdAt: '2026-09-05T08:00:00.000Z',
+    updatedAt: '2026-09-06T09:00:00.000Z',
+  },
 ];
