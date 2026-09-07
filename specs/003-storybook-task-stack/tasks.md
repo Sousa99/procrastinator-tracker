@@ -57,17 +57,17 @@
 
 ### Tests for User Story 1
 
-- [ ] T010 [P] [US1] Unit test `TaskDeck` display + auto-rotate behavior in `frontend/tests/task-deck.test.tsx`: renders the top card + stacked cards, advances on `autoRotateMs` (fake timers), wraps on `loop`, stops at `autoRotateMs: 0`, and applies `filters`
-- [ ] T011 [P] [US1] Unit test `TaskDeckWrapper` fetch/refresh semantics in `frontend/tests/task-deck-wrapper.test.tsx`: fetches on mount via `dataSource`, refetches on `refreshRateMs` interval, no overlapping in-flight requests, interval cleaned up on unmount/change, `refreshRateMs: 0` fetches once, error and empty states render
+- [X] T010 [P] [US1] Unit test `TaskDeck` display + auto-rotate behavior in `frontend/tests/task-deck.test.tsx`: renders the top card + stacked cards, advances on `autoRotateMs` (fake timers), wraps on `loop`, stops at `autoRotateMs: 0`, and applies `filters`
+- [X] T011 [P] [US1] Unit test `TaskDeckWrapper` fetch/refresh semantics in `frontend/tests/task-deck-wrapper.test.tsx`: fetches on mount via `dataSource`, refetches on `refreshRateMs` interval, no overlapping in-flight requests, interval cleaned up on unmount/change, `refreshRateMs: 0` fetches once, error and empty states render
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Install `motion` + `@radix-ui/react-use-controllable-state` in `frontend/` and add them to `package.json` (motion as a runtime dep + peerDependency)
-- [ ] T013 [P] [US1] Vendor/adapt the MIT Kibo `Deck` primitives into `frontend/src/components/ui/deck/deck.tsx` (`Deck`, `DeckCards`, `DeckCard`, `DeckItem`, `DeckEmpty`) using the local `cn` util, plus `autoRotateMs` + `loop` additions and drag-pause/timer-reset hooks
-- [ ] T014 [P] [US1] Create `frontend/src/components/task/TaskDeck.tsx` — presentational swipeable deck per `data-model.md` (`tasks`, `filters`, `autoRotateMs`, `loop`, `stackSize`, `renderCard?`, `onCardChange?`, `className?`), router-free full-card default, urgency-descending order with unset last, client-side filter matching
-- [ ] T015 [P] [US1] Create `frontend/src/components/task/TaskDeckWrapper.tsx` — self-fetching wrapper per `data-model.md` (`filters`, `refreshRateMs` default 30000, `dataSource?` default `api.listTasks`, forwards `autoRotateMs`/`loop`/`stackSize`/`renderCard`), interval-based refetch with in-flight guard, loading/error/empty states, cleanup on unmount
-- [ ] T016 [US1] Rename `frontend/src/components/task/TaskStack.fixtures.ts` → `TaskDeck.fixtures.ts` and update imports
-- [ ] T017 [US1] Create `frontend/src/components/task/TaskDeck.stories.tsx` + `TaskDeckWrapper.stories.tsx` — `Default`, `Filtered`, `Looped`, `SelfFetchingWrapper` stories with controls (auto-rotate, loop, stack-size; `autoRotateMs: 0` by default so the deck stays put), per `contracts/storybook.md`
+- [X] T012 [P] [US1] Install `motion` + `@radix-ui/react-use-controllable-state` in `frontend/` and add them to `package.json` (motion as a runtime dep + peerDependency)
+- [X] T013 [P] [US1] Vendor/adapt the MIT Kibo `Deck` primitives into `frontend/src/components/ui/deck/deck.tsx` (`Deck`, `DeckCards`, `DeckCard`, `DeckItem`, `DeckEmpty`) using the local `cn` util, plus `autoRotateMs` + `loop` additions and drag-pause/timer-reset hooks
+- [X] T014 [P] [US1] Create `frontend/src/components/task/TaskDeck.tsx` — presentational swipeable deck per `data-model.md` (`tasks`, `filters`, `autoRotateMs`, `loop`, `stackSize`, `renderCard?`, `onCardChange?`, `className?`), router-free full-card default, urgency-descending order with unset last, client-side filter matching
+- [X] T015 [P] [US1] Create `frontend/src/components/task/TaskDeckWrapper.tsx` — self-fetching wrapper per `data-model.md` (`filters`, `refreshRateMs` default 30000, `dataSource?` default `api.listTasks`, forwards `autoRotateMs`/`loop`/`stackSize`/`renderCard`), interval-based refetch with in-flight guard, loading/error/empty states, cleanup on unmount
+- [X] T016 [US1] Rename `frontend/src/components/task/TaskStack.fixtures.ts` → `TaskDeck.fixtures.ts` and update imports
+- [X] T017 [US1] Create `frontend/src/components/task/TaskDeck.stories.tsx` + `TaskDeckWrapper.stories.tsx` — `Default`, `Filtered`, `AutoRotating`, `NoLoop`, `SelfFetchingWrapper` stories with controls (auto-rotate, loop, stack-size; `autoRotateMs: 0` by default so the deck stays put), per `contracts/storybook.md`
 
 **Checkpoint**: At this point, User Story 1 is fully functional and testable independently.
 
@@ -121,7 +121,7 @@
 
 **Purpose**: Retire the old `TaskStack` implementation, update docs, run quality gates, and validate end-to-end.
 
-- [ ] T023 [US1] Delete the retired `TaskStack` implementation: `frontend/src/components/task/TaskStack.tsx`, `TaskStackWrapper.tsx`, `TaskStack.stories.tsx`, `TaskStackWrapper.stories.tsx`, `frontend/tests/task-stack.test.tsx`, `frontend/tests/task-stack-wrapper.test.tsx`; update `frontend/src/index.ts` barrel exports (`TaskDeck`, `TaskDeckWrapper` + prop types) and any remaining references
+- [X] T023 [US1] Delete the retired `TaskStack` implementation: `frontend/src/components/task/TaskStack.tsx`, `TaskStackWrapper.tsx`, `TaskStack.stories.tsx`, `TaskStackWrapper.stories.tsx`, `frontend/tests/task-stack.test.tsx`, `frontend/tests/task-stack-wrapper.test.tsx`; update `frontend/src/index.ts` barrel exports (`TaskDeck`, `TaskDeckWrapper` + prop types) and any remaining references (done in US1 — the fixtures rename made the old files broken; verified no `TaskStack` references remain)
 - [ ] T024 [P] Update repo `README.md` with the Storybook usage, the exportable `TaskDeck` component (swipe/auto-rotate/loop), and the library-build/install note
 - [ ] T025 Run full quality gates: `pnpm format`, `pnpm lint`, `pnpm typecheck`, `pnpm test`
 - [ ] T026 Run `quickstart.md` validation end-to-end (Storybook stories, library build + publint/attw, in-app Deck | List)

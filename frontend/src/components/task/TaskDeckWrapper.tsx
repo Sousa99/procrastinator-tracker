@@ -2,9 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Task, TaskFilters } from '../../api/client';
 import { api } from '../../api/client';
 import { cn } from '../../lib/utils';
-import { TaskStack, type TaskStackProps } from './TaskStack';
+import { TaskDeck, type TaskDeckProps } from './TaskDeck';
 
-export interface TaskStackWrapperProps extends Omit<TaskStackProps, 'tasks' | 'filters'> {
+export interface TaskDeckWrapperProps extends Omit<TaskDeckProps, 'tasks'> {
   filters?: TaskFilters;
   refreshRateMs?: number;
   dataSource?: (filters: TaskFilters) => Promise<Task[]>;
@@ -18,14 +18,17 @@ const hasActiveFilters = (filters: TaskFilters): boolean =>
 
 const EMPTY_FILTERS: TaskFilters = {};
 
-export function TaskStackWrapper({
+export function TaskDeckWrapper({
   filters = EMPTY_FILTERS,
   refreshRateMs = 30000,
   dataSource = api.listTasks,
+  autoRotateMs = 4000,
+  loop = true,
+  stackSize = 3,
   renderCard,
-  maxVisible,
+  onCardChange,
   className,
-}: TaskStackWrapperProps) {
+}: TaskDeckWrapperProps) {
   const [state, setState] = useState<LoadState>({ kind: 'loading' });
   const inFlight = useRef(false);
   const mounted = useRef(true);
@@ -94,11 +97,14 @@ export function TaskStackWrapper({
             {hasActiveFilters(filters) ? 'No tasks match these filters.' : 'No tasks yet.'}
           </p>
         ) : (
-          <TaskStack
+          <TaskDeck
             tasks={state.tasks}
             filters={filters}
+            autoRotateMs={autoRotateMs}
+            loop={loop}
+            stackSize={stackSize}
             renderCard={renderCard}
-            maxVisible={maxVisible}
+            onCardChange={onCardChange}
           />
         ))}
     </div>

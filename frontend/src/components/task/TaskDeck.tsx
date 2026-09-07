@@ -4,14 +4,20 @@ import type { Task, TaskFilters } from '../../api/client';
 import { Badge, StatusBadge } from '../ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { cn } from '../../lib/utils';
+import { Deck, DeckCards, DeckItem } from '../ui/deck/deck';
 
-export interface TaskStackProps {
+export interface TaskDeckProps {
   tasks: Task[];
   filters?: TaskFilters;
+  autoRotateMs?: number;
+  loop?: boolean;
+  stackSize?: number;
   renderCard?: (task: Task) => ReactNode;
-  maxVisible?: number;
+  onCardChange?: (index: number) => void;
   className?: string;
 }
+
+const EMPTY_FILTERS: TaskFilters = {};
 
 function matchesFilters(task: Task, filters: TaskFilters): boolean {
   if (filters.status !== undefined && task.status !== filters.status) return false;
@@ -39,7 +45,7 @@ function sortByUrgency(a: Task, b: Task): number {
   return b.urgency - a.urgency;
 }
 
-export function TaskStackCard({ task }: { task: Task }) {
+export function TaskDeckCard({ task }: { task: Task }) {
   const isUrgent = task.urgency !== null && task.urgency >= 4;
   return (
     <Card className={cn('transition hover:border-amber-400', isUrgent && 'border-amber-400/80')}>
@@ -86,31 +92,35 @@ export function TaskStackCard({ task }: { task: Task }) {
   );
 }
 
-export function TaskStack({
+export function TaskDeck({
   tasks,
-  filters = {},
+  filters = EMPTY_FILTERS,
+  autoRotateMs = 4000,
+  loop = true,
+  stackSize = 3,
   renderCard,
-  maxVisible,
+  onCardChange,
   className,
-}: TaskStackProps) {
-  const render = renderCard ?? ((task: Task) => <TaskStackCard key={task.id} task={task} />);
-  const visible = tasks
-    .filter((task) => matchesFilters(task, filters))
-    .sort(sortByUrgency)
-    .slice(0, maxVisible);
+}: TaskDeckProps) {
+  const render = renderCard ?? ((task: Task) => <TaskDeckCard task={task} />);
+  const visible = tasks.filter((task) => matchesFilters(task, filters)).sort(sortByUrgency);
+
+  if (visible.length === 0) return null;
 
   return (
-    <div className={cn('relative flex flex-col', className)}>
-      {visible.map((task, index) => (
-        <div
-          key={task.id}
-          data-testid="task-stack-item"
-          className={cn(index > 0 && 'task-stack-overlap -mt-24')}
-          style={{ zIndex: visible.length - index }}
-        >
-          {render(task)}
-        </div>
-      ))}
-    </div>
+    <Deck className={cn('mx-auto aspect-[3/4] w-full max-w-sm', className)}>
+      <DeckCards
+        autoRotateMs={autoRotateMs}
+        loop={loop}
+        onCurrentIndexChange={onCardChange}
+        stackSize={stackSize}
+      >
+        {visible.map((task) => (
+          <DeckItem className="p-0" data-testid="task-deck-card" key={task.id}>
+            {render(task)}
+          </DeckItem>
+        ))}
+      </DeckCards>
+    </Deck>
   );
 }
