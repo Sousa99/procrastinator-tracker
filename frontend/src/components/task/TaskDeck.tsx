@@ -60,7 +60,11 @@ export function TaskDeckCard({ task }: { task: Task }) {
         <StatusBadge status={task.status} />
       </CardHeader>
       <CardContent className="flex min-h-0 flex-1 flex-col overflow-hidden">
-        {task.description && <p className="line-clamp-2 text-slate-600">{task.description}</p>}
+        {task.description && (
+          <p className="line-clamp-6 min-h-0 flex-1 overflow-hidden text-slate-600">
+            {task.description}
+          </p>
+        )}
         <div className="mt-auto space-y-2">
           <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
             {task.urgency !== null && (

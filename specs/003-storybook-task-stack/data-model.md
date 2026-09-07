@@ -60,9 +60,10 @@ backend's urgency ordering semantics).
 
 **Sizing rule**: the deck stage fills the container width (`w-full`) with a fixed max height
 (`h-[24rem]` base, `sm:h-[26rem]`). All cards are uniform (`h-full w-full flex flex-col
-overflow-hidden`) regardless of content. Card content is anchored: description at the top,
-meta/tags/assignees pushed to the card bottom (`mt-auto`) so content fills the card; long
-descriptions ellipsize via `line-clamp-2`.
+overflow-hidden`) regardless of content. Card content is anchored: description at the top
+(`min-h-0 flex-1` so it fills the available space), meta/tags/assignees pushed to the card
+bottom (`mt-auto`). Long descriptions ellipsize via `line-clamp-6` — the text fills the card
+before the ellipsis appears.
 
 ### TaskDeckWrapper (exported, self-fetching)
 

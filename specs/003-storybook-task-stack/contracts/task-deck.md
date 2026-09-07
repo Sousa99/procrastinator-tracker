@@ -47,9 +47,10 @@ card away. Skipping is view-only (no task mutation).
 
 **Sizing**: the deck stage fills the container width (`w-full`) with a fixed max height
 (`h-[24rem]` base, `sm:h-[26rem]`). Cards are uniform regardless of content; card content is
-anchored (description top, meta/tags/assignees bottom) and long text ellipsizes
-(`line-clamp-2`). Pass `className` to adjust the stage. The swipe/exit animation duration is
-configurable via `slideDurationMs`.
+anchored (description fills the top via `flex-1`, meta/tags/assignees pinned to the bottom)
+and long text ellipsizes (`line-clamp-6`, filling the card before the ellipsis). Pass
+`className` to adjust the stage. The swipe/exit animation duration is configurable via
+`slideDurationMs`.
 
 ### `TaskDeck` (internal presentational)
 
