@@ -5,9 +5,14 @@ import type { TaskFilters } from '../api/client';
 import { TaskCreateForm } from '../components/task/TaskCreateForm';
 import { TaskFilters as FilterBar } from '../components/task/TaskFilters';
 import { TaskCard } from '../components/task/TaskCard';
+import { TaskDeckWrapper } from '../components/task/TaskDeckWrapper';
+import { cn } from '../lib/utils';
+
+type ViewMode = 'deck' | 'list';
 
 export default function DashboardPage() {
   const [filters, setFilters] = useState<TaskFilters>({});
+  const [view, setView] = useState<ViewMode>('deck');
   const tasks = useTasks(filters);
   const [showForm, setShowForm] = useState(false);
 
@@ -37,38 +42,64 @@ export default function DashboardPage() {
 
       <FilterBar filters={filters} onChange={setFilters} />
 
-      {tasks.isLoading && <p className="text-sm text-slate-400">Loading tasks…</p>}
-      {tasks.isError && (
-        <p className="text-sm text-red-600">
-          Could not load tasks: {tasks.error?.message ?? 'unknown error'}
-        </p>
-      )}
-
-      {!tasks.isLoading && !tasks.isError && active.length === 0 && (
-        <p className="rounded-xl bg-white/60 py-8 text-center text-sm text-slate-400">
-          {filters.status || filters.tag
-            ? 'No tasks match these filters.'
-            : 'No active tasks. Add one above to get rolling.'}
-        </p>
-      )}
-
-      <div className="space-y-3">
-        {active.map((task) => (
-          <TaskCard key={task.id} task={task} />
-        ))}
+      <div className="flex justify-center">
+        <div className="inline-flex rounded-xl border border-amber-200/70 bg-white p-1 shadow-sm">
+          {(['deck', 'list'] as const).map((mode) => (
+            <button
+              key={mode}
+              type="button"
+              onClick={() => setView(mode)}
+              className={cn(
+                'rounded-lg px-4 py-1.5 text-sm font-medium capitalize transition',
+                view === mode
+                  ? 'bg-amber-500 text-white shadow-sm'
+                  : 'text-slate-500 hover:bg-amber-50',
+              )}
+            >
+              {mode}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {finished.length > 0 && (
-        <section>
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
-            Done ({finished.length})
-          </h2>
-          <div className="space-y-3 opacity-70">
-            {finished.map((task) => (
+      {view === 'deck' && <TaskDeckWrapper filters={{ ...filters, finished: false }} />}
+
+      {view === 'list' && (
+        <>
+          {tasks.isLoading && <p className="text-sm text-slate-400">Loading tasks…</p>}
+          {tasks.isError && (
+            <p className="text-sm text-red-600">
+              Could not load tasks: {tasks.error?.message ?? 'unknown error'}
+            </p>
+          )}
+
+          {!tasks.isLoading && !tasks.isError && active.length === 0 && (
+            <p className="rounded-xl bg-white/60 py-8 text-center text-sm text-slate-400">
+              {filters.status || filters.tag
+                ? 'No tasks match these filters.'
+                : 'No active tasks. Add one above to get rolling.'}
+            </p>
+          )}
+
+          <div className="space-y-3">
+            {active.map((task) => (
               <TaskCard key={task.id} task={task} />
             ))}
           </div>
-        </section>
+
+          {finished.length > 0 && (
+            <section>
+              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                Done ({finished.length})
+              </h2>
+              <div className="space-y-3 opacity-70">
+                {finished.map((task) => (
+                  <TaskCard key={task.id} task={task} />
+                ))}
+              </div>
+            </section>
+          )}
+        </>
       )}
     </div>
   );

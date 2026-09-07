@@ -81,8 +81,8 @@
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Modify `frontend/src/pages/DashboardPage.tsx` to add a local `view: 'deck' | 'list'` state and a segmented toggle; Deck → `TaskDeckWrapper` (with current `filters` state, default `refreshRateMs`/`autoRotateMs`), List → the existing vertical `TaskCard` list
-- [ ] T019 [US2] Verify the dashboard filter bar drives `TaskDeckWrapper.filters` in Deck mode (refetch on change) without duplicating fetch logic
+- [X] T018 [US2] Modify `frontend/src/pages/DashboardPage.tsx` to add a local `view: 'deck' | 'list'` state and a segmented toggle; Deck → `TaskDeckWrapper` (with current `filters` state, default `refreshRateMs`/`autoRotateMs`), List → the existing vertical `TaskCard` list
+- [X] T019 [US2] Verify the dashboard filter bar drives `TaskDeckWrapper.filters` in Deck mode (refetch on change) without duplicating fetch logic
 
 **Checkpoint**: At this point, User Stories 1 AND 2 both work independently.
 
