@@ -28,6 +28,9 @@ entry so consumers share one shape.
   (`currentIndex`/`onCurrentIndexChange`), supports `animateOnIndexChange` +
   `indexChangeDirection` (used to drive the auto-rotate exit animation), `threshold`,
   `stackSize`, `perspective`, `scale`, and `onSwipe`/`onSwipeEnd`.
+- **`DeckItem` is a neutral fill container** (`flex h-full w-full items-center justify-center`,
+  no border/background/shadow) — the inner card component is the only visible surface. This
+  prevents a stray outline from the wrapper extending beyond the card.
 
 ## Component family
 
@@ -53,6 +56,11 @@ data mutation.
 
 **Ordering rule**: unset `urgency` sorts after set values; set values descending (matches the
 backend's urgency ordering semantics).
+
+**Sizing rule**: the deck stage fills the container width (`w-full`) with a fixed max height
+(`h-[24rem]` base, `sm:h-[26rem]`). All cards are uniform (`h-full w-full flex flex-col
+overflow-hidden`) regardless of content; long descriptions ellipsize via `line-clamp-2` and
+`CardContent` is `flex-1 min-h-0 overflow-hidden`.
 
 ### TaskDeckWrapper (exported, self-fetching)
 

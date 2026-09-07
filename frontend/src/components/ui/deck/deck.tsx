@@ -265,10 +265,7 @@ const DeckCard = ({
       whileDrag={{ scale: 1.05 }}
     >
       {cloneElement(castedChildren, {
-        className: cn(
-          'h-full w-full select-none rounded-lg shadow-lg',
-          castedChildren.props.className,
-        ),
+        className: cn('h-full w-full select-none', castedChildren.props.className),
       })}
     </motion.div>
   );
@@ -277,13 +274,7 @@ const DeckCard = ({
 export type DeckItemProps = HTMLAttributes<HTMLDivElement>;
 
 export const DeckItem = ({ className, ...props }: DeckItemProps) => (
-  <div
-    className={cn(
-      'flex h-full w-full items-center justify-center rounded-lg border bg-card text-card-foreground shadow-lg',
-      className,
-    )}
-    {...props}
-  />
+  <div className={cn('flex h-full w-full items-center justify-center', className)} {...props} />
 );
 
 export type DeckEmptyProps = HTMLAttributes<HTMLDivElement>;

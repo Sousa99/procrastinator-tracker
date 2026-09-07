@@ -48,12 +48,17 @@ function sortByUrgency(a: Task, b: Task): number {
 export function TaskDeckCard({ task }: { task: Task }) {
   const isUrgent = task.urgency !== null && task.urgency >= 4;
   return (
-    <Card className={cn('transition hover:border-amber-400', isUrgent && 'border-amber-400/80')}>
+    <Card
+      className={cn(
+        'flex h-full w-full flex-col overflow-hidden transition hover:border-amber-400',
+        isUrgent && 'border-amber-400/80',
+      )}
+    >
       <CardHeader>
         <CardTitle className="flex-1">{task.title}</CardTitle>
         <StatusBadge status={task.status} />
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="min-h-0 flex-1 space-y-2 overflow-hidden">
         {task.description && <p className="line-clamp-2 text-slate-600">{task.description}</p>}
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
           {task.urgency !== null && (
@@ -108,7 +113,7 @@ export function TaskDeck({
   if (visible.length === 0) return null;
 
   return (
-    <Deck className={cn('mx-auto aspect-[3/4] w-full max-w-sm', className)}>
+    <Deck className={cn('h-[24rem] w-full sm:h-[26rem]', className)}>
       <DeckCards
         autoRotateMs={autoRotateMs}
         loop={loop}

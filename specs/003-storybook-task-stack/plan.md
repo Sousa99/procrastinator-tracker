@@ -146,6 +146,11 @@ frontend/
 Build outputs: SPA app → `dist-app/` (`vite.config.ts` `outDir`), Storybook static →
 `dist-storybook/` (`-o dist-storybook`), library → `dist-lib/` (`vite.lib.config.ts`).
 
+**Sizing/visual**: the deck stage fills the container width with a fixed max height
+(`h-[24rem]`/`sm:h-[26rem]`); all cards are uniform (`h-full flex flex-col overflow-hidden`)
+with long text ellipsized (`line-clamp-2`). `DeckItem` is a neutral fill container so no
+wrapper border extends past the card.
+
 **Structure Decision**: No new package — the component and its wrapper live in the existing
 `frontend/src/components/task/` directory alongside `TaskCard`. The deck primitives live under
 `frontend/src/components/ui/deck/` (reusable UI). The library build uses a dedicated

@@ -23,7 +23,7 @@ import { TaskDeckWrapper } from '@procrastinator-tracker/frontend';
   loop                  // optional, default true (cycles forever)
   stackSize={3}         // optional, default 3
   dataSource={async (filters) => myFetch(filters)} // optional, default api.listTasks
-  className="max-w-md"
+  className="w-full"
 />
 ```
 
@@ -42,6 +42,10 @@ Behavior: fetches on mount, on `filters` change, and on each `refreshRateMs` tic
 overlap an in-flight request). Renders loading / error / empty states around the swipe deck.
 The deck advances on `autoRotateMs`, loops forever, and resets its timer when the user drags a
 card away. Skipping is view-only (no task mutation).
+
+**Sizing**: the deck stage fills the container width (`w-full`) with a fixed max height
+(`h-[24rem]` base, `sm:h-[26rem]`). Cards are uniform regardless of content; long text
+ellipsizes (`line-clamp-2`). Pass `className` to adjust the stage.
 
 ### `TaskDeck` (internal presentational)
 
