@@ -55,21 +55,26 @@ tree, the same `index.css` emits styles for both app and preview iframe — one 
 
 - Stories are co-located: `ComponentName.stories.tsx` next to the component.
 - Use `@storybook/react-vite`'s `Meta` / `StoryObj` types.
-- `TaskStack` story drives props via **controls** (argTypes) so `filters` and `refreshRateMs`
-  are demonstrable. Because `TaskStack` is presentational, the story supplies static sample
-  `tasks`; `refreshRateMs` is demonstrated on the **wrapper** story with a mocked `dataSource`
-  (avoids hitting the real API in Storybook).
+- `TaskDeck` story drives props via **controls** (argTypes) so `autoRotateMs`, `loop`,
+  `stackSize`, and `filters` are demonstrable. Because `TaskDeck` is presentational, the story
+  supplies static sample `tasks`; `refreshRateMs` is demonstrated on the **wrapper** story with
+  a mocked `dataSource` (avoids hitting the real API in Storybook). In stories, use
+  `autoRotateMs` sparingly (or `0`) so the deck doesn't spin out from under the preview.
 - Existing custom components get at least a basic story (e.g. `TaskCard.stories.tsx`) with
   representative fixture data.
 
 ```tsx
-// frontend/src/components/task/TaskStack.stories.tsx
+// frontend/src/components/task/TaskDeck.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TaskStack } from './TaskStack';
-import { TaskStackWrapper } from './TaskStackWrapper';
-import { sampleTasks } from './TaskStack.fixtures';
+import { TaskDeck } from './TaskDeck';
+import { TaskDeckWrapper } from './TaskDeckWrapper';
+import { sampleTasks } from './TaskDeck.fixtures';
 
-const meta = { title: 'Task/TaskStack', component: TaskStack, args: { tasks: sampleTasks } } satisfies Meta<typeof TaskStack>;
+const meta = {
+  title: 'Task/TaskDeck',
+  component: TaskDeck,
+  args: { tasks: sampleTasks, autoRotateMs: 0, loop: true, stackSize: 3 },
+} satisfies Meta<typeof TaskDeck>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
@@ -80,8 +85,10 @@ export const Filtered: Story = {
   args: { tasks: sampleTasks.filter((t) => t.status === 'in-progress') },
 };
 
-export const SelfFetchingWrapper: StoryObj<typeof TaskStackWrapper> = {
-  render: (args) => <TaskStackWrapper {...args} dataSource={() => Promise.resolve(sampleTasks)} />,
+export const SelfFetchingWrapper: StoryObj<typeof TaskDeckWrapper> = {
+  render: (args) => (
+    <TaskDeckWrapper {...args} dataSource={() => Promise.resolve(sampleTasks)} autoRotateMs={0} />
+  ),
   args: { refreshRateMs: 0 }, // fetch once; controls let you raise it
 };
 ```
@@ -89,7 +96,8 @@ export const SelfFetchingWrapper: StoryObj<typeof TaskStackWrapper> = {
 ## Validation (SC-001, SC-005)
 
 - `pnpm --filter frontend storybook` boots with no broken config.
-- The `Task/TaskStack` story renders a stacked deck; filter and refresh-rate controls work.
+- The `Task/TaskDeck` story renders a swipeable card stack; auto-rotate, loop, and stack-size
+  controls work; dragging the top card advances the deck.
 - At least one existing component (e.g. `Task/TaskCard`) has a story and renders.
 
 ## Adding new stories
