@@ -94,6 +94,27 @@ export const SelfFetchingWrapper: StoryObj<typeof TaskDeckWrapper> = {
 };
 ```
 
+Existing components that use react-router (e.g. `TaskCard` with `Link`) need a `MemoryRouter`
+decorator in their story:
+
+```tsx
+// frontend/src/components/task/TaskCard.stories.tsx
+import { MemoryRouter } from 'react-router';
+import { TaskCard } from './TaskCard';
+
+const meta = {
+  title: 'Task/TaskCard',
+  component: TaskCard,
+  decorators: [
+    (Story) => (
+      <MemoryRouter>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
+} satisfies Meta<typeof TaskCard>;
+```
+
 ## Validation (SC-001, SC-005)
 
 - `pnpm --filter frontend storybook` boots with no broken config.

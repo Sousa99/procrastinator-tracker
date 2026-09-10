@@ -111,7 +111,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T022 [P] [US4] Create `frontend/src/components/task/TaskCard.stories.tsx` — `Default` story with representative `Task` fixtures covering urgent/non-urgent, tags, assignees, due date
+- [X] T022 [P] [US4] Create `frontend/src/components/task/TaskCard.stories.tsx` — `Default`, `Urgent`, `WithDescription`, `Minimal` stories with representative `Task` fixtures covering urgent/non-urgent, tags, assignees, due date, and a long-description fixture (wrapped in `MemoryRouter` since TaskCard uses react-router's Link)
 
 **Checkpoint**: All user stories now work independently.
 
