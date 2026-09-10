@@ -96,8 +96,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T020 [P] [US3] Verify `pnpm --filter frontend build:lib` emits `frontend/dist-lib/` (ESM `index.js` + bundled `index.d.ts`) with `TaskDeck`/`TaskDeckWrapper` exported and no SPA `index.html`/app-only code leaking into the package
-- [ ] T021 [US3] Run `npx publint` and `npx @arethetypeswrong/cli --pack` against the built package and fix any `exports`/type-resolution errors in `frontend/package.json` or `vite.lib.config.ts` (per `contracts/task-deck.md`)
+- [X] T020 [P] [US3] Verify `pnpm --filter frontend build:lib` emits `frontend/dist-lib/` (ESM `index.js` + bundled `index.d.ts` + `styles.css` + `styles.d.ts`) with `TaskDeck`/`TaskDeckWrapper` exported and no SPA `index.html`/app-only code leaking into the package. `build:lib` now runs `build:css` (Tailwind CLI) to ship a real `styles.css`.
+- [X] T021 [US3] Run `npx publint` and `npx @arethetypeswrong/cli --pack` against the built package and fix any `exports`/type-resolution errors in `frontend/package.json` or `vite.lib.config.ts` (per `contracts/task-deck.md`). Added `typesVersions` + `styles.d.ts` for the `./styles.css` subpath; the remaining ESM-only CJS warning is documented as an accepted tradeoff.
 
 **Checkpoint**: The package is installable/consumable; publishing to a registry remains a documented follow-up.
 

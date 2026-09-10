@@ -173,10 +173,12 @@ Resolve the integration specifics:
   `../src/index.css`). In Storybook 9 the essentials addons (controls, actions, viewport) are
   built into core — no `@storybook/addon-essentials` package is required.
 - Vite library mode for exporting a React component package: entry, ESM format,
-  `external: ['react', 'react-dom', 'react/jsx-runtime', 'motion']`, `vite-plugin-dts` for
-  type declarations, and the `package.json` `exports` map + `files` + `peerDependencies`.
-  Build outputs are segregated: `dist-app/` (SPA), `dist-storybook/` (Storybook static),
-  `dist-lib/` (library package).
+  `external: ['react', 'react-dom', 'react/jsx-runtime', 'motion']`, `vite-plugin-dts` for type
+  declarations, and the `package.json` `exports` map + `files` + `peerDependencies`. A Tailwind
+  v4 CLI step (`build:css`) ships a compiled `styles.css` (+ `styles.d.ts`, `typesVersions`)
+  so the `./styles.css` subpath export is real. The package is ESM-only (attw's CJS→ESM
+  warning is an accepted, documented tradeoff). Build outputs are segregated: `dist-app/`
+  (SPA), `dist-storybook/` (Storybook static), `dist-lib/` (library package).
 - The Kibo UI `Deck` primitive (MIT): `Deck`, `DeckCards`, `DeckCard`, `DeckItem`,
   `DeckEmpty`; controllable `currentIndex`, `animateOnIndexChange`, `indexChangeDirection`,
   `threshold`, `stackSize`, `perspective`, `scale`; `onSwipe`/`onSwipeEnd`. How to add

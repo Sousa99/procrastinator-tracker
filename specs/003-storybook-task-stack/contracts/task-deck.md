@@ -78,7 +78,9 @@ support. These are internal to the frontend package; consumers import `TaskDeck`
 ## Library build & `package.json` contract
 
 Build command: `pnpm --filter frontend build:lib` (Vite library mode, `vite.lib.config.ts` +
-`vite-plugin-dts`). Outputs ESM JS + bundled `.d.ts` into `frontend/dist-lib/`.
+`vite-plugin-dts`). Outputs ESM JS + bundled `.d.ts` into `frontend/dist-lib/`, then runs
+`build:css` (Tailwind v4 CLI) to emit a compiled `styles.css` (with `styles.d.ts`) so the
+`./styles.css` subpath export ships real styles for consumers.
 
 ```jsonc
 // frontend/package.json (target shape — reconciled with the existing SPA build)
@@ -94,12 +96,20 @@ Build command: `pnpm --filter frontend build:lib` (Vite library mode, `vite.lib.
       "types": "./dist-lib/index.d.ts",
       "import": "./dist-lib/index.js"
     },
-    "./styles.css": "./dist-lib/styles.css"     // emitted Tailwind CSS if shipped
+    "./styles.css": {
+      "types": "./dist-lib/styles.d.ts",
+      "default": "./dist-lib/styles.css"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "styles.css": ["./dist-lib/styles.d.ts"]
+    }
   },
   "files": ["dist-lib"],
   "sideEffects": false,
   "peerDependencies": {
-    "motion": "^12.0.0",                        // deck animation engine
+    "motion": "^13.0.0",                        // deck animation engine
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "lucide-react": "^0.469.0"                  // default card rendering uses icons
@@ -117,6 +127,9 @@ Notes:
   `build-storybook`), library → `dist-lib/` (via `vite.lib.config.ts` `outDir`). No collision.
 - `motion` is externalized in the library build (`rollupOptions.external`) and declared a
   `peerDependency`, so consumers provide it and there is no duplicate-motion hazard.
+- The package is **ESM-only** (`type: module`, `formats: ['es']`). `publint` and
+  `@arethetypeswrong/cli --pack` pass; attw reports a single **CJS→ESM warning** (CommonJS
+  consumers need dynamic import) — accepted and documented, since the workspace is ESM-only.
 - Validation before treating the package as consumable: `npx publint` and
   `npx @arethetypeswrong/cli --pack` must pass (see quickstart).
 

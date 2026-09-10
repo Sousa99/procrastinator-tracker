@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "build:lib": "vite build --config vite.lib.config.ts",
+    "build:lib": "vite build --config vite.lib.config.ts && pnpm build:css",
+    "build:css": "tailwindcss -i ./src/index.css -o ./dist-lib/styles.css --minify && printf 'declare const styles: string;\\nexport default styles;\\n' > ./dist-lib/styles.d.ts",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o dist-storybook",
@@ -25,11 +26,21 @@
       "types": "./dist-lib/index.d.ts",
       "import": "./dist-lib/index.js"
     },
-    "./styles.css": "./dist-lib/styles.css"
+    "./styles.css": {
+      "types": "./dist-lib/styles.d.ts",
+      "default": "./dist-lib/styles.css"
+    }
   },
   "files": [
     "dist-lib"
   ],
+  "typesVersions": {
+    "*": {
+      "styles.css": [
+        "./dist-lib/styles.d.ts"
+      ]
+    }
+  },
   "sideEffects": false,
   "peerDependencies": {
     "lucide-react": "^0.469.0",
@@ -49,6 +60,7 @@
   "devDependencies": {
     "@microsoft/api-extractor": "^7.59.0",
     "@storybook/react-vite": "^9.1.20",
+    "@tailwindcss/cli": "^4.3.3",
     "@tailwindcss/vite": "^4.1.0",
     "@testing-library/jest-dom": "^6.6.0",
     "@testing-library/react": "^16.1.0",

@@ -34,7 +34,7 @@ pnpm --filter frontend storybook
 
 ```bash
 pnpm --filter frontend build:lib
-# -> frontend/dist-lib/ (ESM + bundled .d.ts)
+# -> frontend/dist-lib/ (ESM JS + bundled .d.ts + styles.css + styles.d.ts)
 ```
 
 Then validate the export contract:
@@ -45,9 +45,10 @@ npx publint
 npx @arethetypeswrong/cli --pack
 ```
 
-**Expected**: `dist-lib/` contains `index.js` + `index.d.ts` (and `styles.css` if shipped);
+**Expected**: `dist-lib/` contains `index.js` + `index.d.ts` + `styles.css` + `styles.d.ts`;
 `publint` reports no missing/invalid `exports` fields; `attw` resolves types from every
-consumer perspective with no errors (including the `motion` peer dependency).
+consumer perspective with no errors. The package is ESM-only, so attw reports a single
+**CJS→ESM warning** (CommonJS consumers need dynamic import) — accepted and documented.
 
 ## 3. In-app: dashboard Deck | List selector (SC-002)
 
