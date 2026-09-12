@@ -142,25 +142,25 @@ quality gates pass.
 
 ### Setup for Storybook Docs
 
-- [ ] T027 Install `@storybook/addon-docs@^9.1.20` as a devDependency in `frontend/` (MDX3; ships the Doc Blocks)
-- [ ] T028 Update `frontend/.storybook/main.ts`: add `@storybook/addon-docs` to `addons` and `'../src/**/*.mdx'` to `stories`
+- [X] T027 Install `@storybook/addon-docs@^9.1.20` as a devDependency in `frontend/` (MDX3; ships the Doc Blocks)
+- [X] T028 Update `frontend/.storybook/main.ts`: add `@storybook/addon-docs` to `addons` and `'../src/**/*.mdx'` to `stories`
 
 ### Control descriptions
 
-- [ ] T029 [P] Add `argTypes` descriptions to `frontend/src/components/task/TaskDeck.stories.tsx` (`tasks`, `filters`, `autoRotateMs`, `loop`, `stackSize`, `slideDurationMs`, `renderCard`, `onCardChange`, `className`)
-- [ ] T030 [P] Add `argTypes` descriptions to `frontend/src/components/task/TaskDeckWrapper.stories.tsx` (`filters`, `refreshRateMs`, `dataSource`, `autoRotateMs`, `loop`, `stackSize`, `slideDurationMs`, `renderCard`, `className`)
-- [ ] T031 [P] Add `argTypes` descriptions to `frontend/src/components/task/TaskCard.stories.tsx` (`task`)
+- [X] T029 [P] Add `argTypes` descriptions to `frontend/src/components/task/TaskDeck.stories.tsx` (`tasks`, `filters`, `autoRotateMs`, `loop`, `stackSize`, `slideDurationMs`, `renderCard`, `onCardChange`, `className`)
+- [X] T030 [P] Add `argTypes` descriptions to `frontend/src/components/task/TaskDeckWrapper.stories.tsx` (`filters`, `refreshRateMs`, `dataSource`, `autoRotateMs`, `loop`, `stackSize`, `slideDurationMs`, `renderCard`, `className`)
+- [X] T031 [P] Add `argTypes` descriptions to `frontend/src/components/task/TaskCard.stories.tsx` (`task`)
 
 ### MDX documentation pages
 
-- [ ] T032 [P] Create `frontend/src/components/task/TaskDeck.mdx` — `Meta of={TaskDeckStories}`, intro prose, `Canvas` for the `Default`, `Filtered`, `AutoRotating`, and `NoLoop` permutations, `Controls`/`ArgTypes` prop table, `Source`
-- [ ] T033 [P] Create `frontend/src/components/task/TaskDeckWrapper.mdx` — same pattern for the `Default` and `AutoRotating` permutations
-- [ ] T034 [P] Create `frontend/src/components/task/TaskCard.mdx` — same pattern for the `Default`, `Urgent`, `WithDescription`, and `Minimal` permutations
+- [X] T032 [P] Create `frontend/src/components/task/TaskDeck.mdx` — `Meta of={TaskDeckStories}`, intro prose, `Canvas` for the `Default`, `Filtered`, `AutoRotating`, and `NoLoop` permutations, `Controls`/`ArgTypes` prop table, `Source`
+- [X] T033 [P] Create `frontend/src/components/task/TaskDeckWrapper.mdx` — same pattern for the `Default` and `AutoRotating` permutations
+- [X] T034 [P] Create `frontend/src/components/task/TaskCard.mdx` — same pattern for the `Default`, `Urgent`, `WithDescription`, and `Minimal` permutations
 
 ### Validation + docs
 
-- [ ] T035 Verify `pnpm --filter frontend storybook` boots with the Docs pages rendering canvases + described controls; run full gates (`pnpm format`, `pnpm lint`, `pnpm typecheck`, `pnpm test`)
-- [ ] T036 Update `specs/003-storybook-task-stack/contracts/storybook.md` with the docs-writing contract (MDX glob + `@storybook/addon-docs`, Doc Blocks pattern, `argTypes` descriptions)
+- [X] T035 Verify `pnpm --filter frontend storybook` boots with the Docs pages rendering canvases + described controls; run full gates (`pnpm format`, `pnpm lint`, `pnpm typecheck`, `pnpm test`)
+- [X] T036 Update `specs/003-storybook-task-stack/contracts/storybook.md` with the docs-writing contract (MDX glob + `@storybook/addon-docs`, Doc Blocks pattern, `argTypes` descriptions)
 
 **Checkpoint**: All task components have a Docs page; Storybook docs are the component reference.
 

@@ -17,7 +17,10 @@ const meta = {
     ),
   ],
   argTypes: {
-    task: { control: false },
+    task: {
+      control: false,
+      description: 'The task to render on the card.',
+    },
   },
 } satisfies Meta<typeof TaskCard>;
 

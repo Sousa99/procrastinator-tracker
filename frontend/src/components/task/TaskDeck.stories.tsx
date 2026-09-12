@@ -13,12 +13,45 @@ const meta = {
     slideDurationMs: 500,
   },
   argTypes: {
-    tasks: { control: false },
-    filters: { control: 'object' },
-    autoRotateMs: { control: { type: 'number', min: 0, step: 1000 } },
-    loop: { control: 'boolean' },
-    stackSize: { control: { type: 'number', min: 1, max: 6 } },
-    slideDurationMs: { control: { type: 'number', min: 100, max: 2000, step: 100 } },
+    tasks: {
+      control: false,
+      description: 'The tasks to render in the deck.',
+    },
+    filters: {
+      control: 'object',
+      description:
+        'Applied client-side for ordering/emphasis; actual filtering happens at fetch time in the wrapper.',
+    },
+    autoRotateMs: {
+      control: { type: 'number', min: 0, step: 1000 },
+      description:
+        'Interval (ms) for auto-advancing the deck; 0 disables. Pauses during a drag and resets after a manual skip.',
+    },
+    loop: {
+      control: 'boolean',
+      description: 'When true, wrap back to the first task instead of showing the empty state.',
+    },
+    stackSize: {
+      control: { type: 'number', min: 1, max: 6 },
+      description: 'Number of visible cards (the top card plus the cards fanned behind it).',
+    },
+    slideDurationMs: {
+      control: { type: 'number', min: 100, max: 2000, step: 100 },
+      description: 'Duration (ms) of the swipe/exit card animation.',
+    },
+    renderCard: {
+      control: false,
+      description: 'Optional per-card render override; defaults to a full TaskDeckCard.',
+    },
+    onCardChange: {
+      control: false,
+      description:
+        'Called with the new index whenever the top card changes (auto-rotate or manual swipe).',
+    },
+    className: {
+      control: 'text',
+      description: 'Optional class names for the deck stage.',
+    },
   },
 } satisfies Meta<typeof TaskDeck>;
 

@@ -115,11 +115,50 @@ const meta = {
 } satisfies Meta<typeof TaskCard>;
 ```
 
+## Docs (MDX + Doc Blocks)
+
+Each task component has a **documentation page** (`ComponentName.mdx` co-located next to its
+`.stories.tsx`) written in MDX using **Doc Blocks** from `@storybook/addon-docs/blocks`.
+
+- `frontend/.storybook/main.ts` enables it: `addons: ['@storybook/addon-docs']` and the
+  `'../src/**/*.mdx'` stories glob.
+- Page shape: `import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'`;
+  `import * as XStories from './X.stories'`; `<Meta of={XStories} />`; markdown intro; a
+  `Canvas of={XStories.Permutation}` per existing story permutation; an `ArgTypes` block for
+  the prop table.
+- **Control descriptions**: every prop gets an `argTypes[prop].description` in the CSF file,
+  so the controls table (canvas) and the docs `ArgTypes` table are self-explanatory.
+- The `ArgTypes` block renders the prop table from `argTypes` — no `remark-gfm` or external
+  dependency needed for tables.
+- **Custom MDX only**: no `tags: ['autodocs']` on documented components (avoids an override
+  conflict with the custom MDX page).
+
+```mdx
+// frontend/src/components/task/TaskDeck.mdx
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as TaskDeckStories from './TaskDeck.stories';
+
+<Meta of={TaskDeckStories} />
+
+# TaskDeck
+
+A swipeable card stack... (prose)
+
+<Canvas of={TaskDeckStories.Default} />
+
+## Props
+
+<ArgTypes of={TaskDeckStories} />
+```
+
 ## Validation (SC-001, SC-005)
 
 - `pnpm --filter frontend storybook` boots with no broken config.
 - The `Task/TaskDeck` story renders a swipeable card stack; auto-rotate, loop, and stack-size
   controls work; dragging the top card advances the deck.
+- Each documented component (`Task/TaskDeck`, `Task/TaskDeck (self-fetching)`,
+  `Task/TaskCard`) has a Docs page whose canvases render its permutations and whose prop table
+  shows the `argTypes` descriptions.
 - At least one existing component (e.g. `Task/TaskCard`) has a story and renders.
 
 ## Adding new stories
