@@ -34,6 +34,29 @@ Primary requirement: add Storybook; build `TaskDeck` (display + self-fetching wr
 frontend package for library export; wire the deck into the dashboard behind a **Deck | List**
 selector; document everything in the same change.
 
+## Storybook Docs extension
+
+**Summary**: Extend the Storybook workbench with a **documentation page per task component**
+(`TaskDeck`, `TaskDeckWrapper`, `TaskCard`) written in **MDX** using **Doc Blocks**
+(`Meta`, `Canvas`, `Story`, `Controls`/`ArgTypes`, `Source`) from `@storybook/addon-docs/blocks`.
+Each page shows a canvas per existing story permutation plus concise usage prose, and the
+controls table renders with a **description for every prop** (from `argTypes.description`).
+
+**Technical context**:
+- Added (dev, frontend): `@storybook/addon-docs@9` (MDX3; ships the Doc Blocks).
+- `frontend/.storybook/main.ts` gains `@storybook/addon-docs` in `addons` and
+  `'../src/**/*.mdx'` in `stories` so MDX docs pages are discovered alongside stories.
+- Prop tables come from the **`ArgTypes`/`Controls` Doc Blocks** (auto-rendered from
+  `argTypes`); no `remark-gfm` or other external dependency is needed for tables.
+- Docs pages are **co-located** `*.mdx` next to each `.stories.tsx`. `.mdx` files under `src/`
+  are ignored by `tsc`/vitest (not a TS extension) and never enter `dist-lib`.
+- **Custom MDX only**: no `tags: ['autodocs']` on the documented components, avoiding an
+  override conflict with the custom MDX page.
+- The project's own `argTypes` get `description` fields (T029–T031) so every control is
+  self-explanatory in both the canvas and the docs page.
+
+**Phase roadmap**: see **Phase 8: Storybook Docs** in `tasks.md` (T027–T036).
+
 ## Technical Context
 
 **Language/Version**: TypeScript / Node 24 LTS, pnpm 11 (unchanged); React 19, Vite 6, Tailwind
@@ -131,15 +154,19 @@ frontend/
 │   │                    #       DeckCard, DeckItem, DeckEmpty) + autoRotate/loop additions
 │   ├── components/task/
 │   │   ├── TaskDeck.tsx            # NEW: presentational swipeable deck (pure) — replaces TaskStack
-│   │   ├── TaskDeck.stories.tsx    # NEW: Storybook stories + controls
+│   │   ├── TaskDeck.stories.tsx    # NEW: Storybook stories + controls (+ argTypes descriptions)
+│   │   ├── TaskDeck.mdx            # NEW (P8): docs page — Meta, prose, Canvas per permutation, Controls/ArgTypes, Source
 │   │   ├── TaskDeckWrapper.tsx     # NEW: self-fetching wrapper (interval + api + autoRotate) — EXPORTED
-│   │   ├── TaskDeckWrapper.stories.tsx # NEW: wrapper story (mocked dataSource)
+│   │   ├── TaskDeckWrapper.stories.tsx # NEW: wrapper story (mocked dataSource) (+ argTypes descriptions)
+│   │   ├── TaskDeckWrapper.mdx     # NEW (P8): docs page — Default + AutoRotating permutations
 │   │   ├── TaskDeck.fixtures.ts    # RENAME: TaskStack.fixtures.ts -> TaskDeck.fixtures.ts
-│   │   ├── TaskCard.stories.tsx    # NEW (P3): story for existing TaskCard
+│   │   ├── TaskCard.stories.tsx    # NEW (P3): story for existing TaskCard (+ argTypes description)
+│   │   ├── TaskCard.mdx            # NEW (P8): docs page — Default, Urgent, WithDescription, Minimal
 │   │   └── [TaskStack.tsx, TaskStackWrapper.tsx, *.stories.tsx — DELETED]
 │   └── api/client.ts               # unchanged — source of Task/TaskFilters types
 ├── pages/DashboardPage.tsx         # MODIFY: add Deck | List selector; Deck -> TaskDeckWrapper, List -> vertical TaskCard list
-├── package.json                    # MODIFY: motion + radix deps/peerDeps, storybook scripts, library build, exports
+├── .storybook/main.ts              # MODIFY (P8): add @storybook/addon-docs; add ../src/**/*.mdx to stories
+├── package.json                    # MODIFY: motion + radix deps/peerDeps, storybook scripts, library build, exports; add @storybook/addon-docs (P8)
 └── tsconfig.json                   # MODIFY (if needed): include .storybook, lib entry
 ```
 

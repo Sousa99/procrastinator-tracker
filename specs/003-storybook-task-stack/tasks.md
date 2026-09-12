@@ -128,6 +128,44 @@
 
 ---
 
+## Phase 8: Storybook Docs (MDX + Doc Blocks)
+
+**Purpose**: Extend the Storybook workbench with a **documentation page per task component**
+(`TaskDeck`, `TaskDeckWrapper`, `TaskCard`) written in **MDX** using **Doc Blocks**
+(`Meta`, `Canvas`, `Story`, `Controls`/`ArgTypes`, `Source`) from `@storybook/addon-docs/blocks`.
+Each page shows a canvas per existing story permutation plus concise usage prose, and every
+control carries a **description** (from `argTypes.description`).
+
+**Independent Test**: `pnpm --filter frontend storybook` → each task component has a Docs page
+that renders its canvases (permutations) and a controls table with prop descriptions; full
+quality gates pass.
+
+### Setup for Storybook Docs
+
+- [ ] T027 Install `@storybook/addon-docs@^9.1.20` as a devDependency in `frontend/` (MDX3; ships the Doc Blocks)
+- [ ] T028 Update `frontend/.storybook/main.ts`: add `@storybook/addon-docs` to `addons` and `'../src/**/*.mdx'` to `stories`
+
+### Control descriptions
+
+- [ ] T029 [P] Add `argTypes` descriptions to `frontend/src/components/task/TaskDeck.stories.tsx` (`tasks`, `filters`, `autoRotateMs`, `loop`, `stackSize`, `slideDurationMs`, `renderCard`, `onCardChange`, `className`)
+- [ ] T030 [P] Add `argTypes` descriptions to `frontend/src/components/task/TaskDeckWrapper.stories.tsx` (`filters`, `refreshRateMs`, `dataSource`, `autoRotateMs`, `loop`, `stackSize`, `slideDurationMs`, `renderCard`, `className`)
+- [ ] T031 [P] Add `argTypes` descriptions to `frontend/src/components/task/TaskCard.stories.tsx` (`task`)
+
+### MDX documentation pages
+
+- [ ] T032 [P] Create `frontend/src/components/task/TaskDeck.mdx` — `Meta of={TaskDeckStories}`, intro prose, `Canvas` for the `Default`, `Filtered`, `AutoRotating`, and `NoLoop` permutations, `Controls`/`ArgTypes` prop table, `Source`
+- [ ] T033 [P] Create `frontend/src/components/task/TaskDeckWrapper.mdx` — same pattern for the `Default` and `AutoRotating` permutations
+- [ ] T034 [P] Create `frontend/src/components/task/TaskCard.mdx` — same pattern for the `Default`, `Urgent`, `WithDescription`, and `Minimal` permutations
+
+### Validation + docs
+
+- [ ] T035 Verify `pnpm --filter frontend storybook` boots with the Docs pages rendering canvases + described controls; run full gates (`pnpm format`, `pnpm lint`, `pnpm typecheck`, `pnpm test`)
+- [ ] T036 Update `specs/003-storybook-task-stack/contracts/storybook.md` with the docs-writing contract (MDX glob + `@storybook/addon-docs`, Doc Blocks pattern, `argTypes` descriptions)
+
+**Checkpoint**: All task components have a Docs page; Storybook docs are the component reference.
+
+---
+
 ## Dependencies & Execution Order
 
 ### Phase Dependencies
@@ -139,6 +177,7 @@
   - US3 depends on US1 (the component must exist to be packaged)
   - US4 is independent and can run at any time after Phase 2
 - **Polish (Final Phase)**: Depends on all desired user stories being complete; T023 (retire TaskStack) must come after US1 replaces it
+- **Storybook Docs (Phase 8)**: Depends on Phase 1 (Storybook) + the components/stories from US1/US4; T027–T028 (setup) precede T029–T031 (descriptions) and T032–T034 (MDX pages), then T035 (verify/gates) and T036 (docs contract)
 
 ### User Story Dependencies
 
@@ -161,6 +200,7 @@
 - T012, T013 can run in parallel with T010/T011 once deps are installed
 - T014 and T015 can run in parallel (different files; T015 composes T014)
 - US4 (T022) can run in parallel with US2/US3 work
+- Phase 8: T029, T030, T031 (argTypes descriptions, distinct files) and T032, T033, T034 (MDX pages, distinct files) can each run in parallel
 - Different user stories can be worked on in parallel by different team members
 
 ---
@@ -196,6 +236,7 @@ Task: "Create frontend/src/components/task/TaskDeckWrapper.tsx"
 3. Add User Story 3 (package export + publint/attw) → Test independently
 4. Add User Story 4 (existing-component stories) → Test independently
 5. Polish: retire TaskStack, README, full gates, quickstart validation
+6. Storybook Docs (Phase 8): setup → argTypes descriptions → MDX pages → verify/gates → docs contract
 
 ### Parallel Team Strategy
 
