@@ -122,9 +122,9 @@
 **Purpose**: Retire the old `TaskStack` implementation, update docs, run quality gates, and validate end-to-end.
 
 - [X] T023 [US1] Delete the retired `TaskStack` implementation: `frontend/src/components/task/TaskStack.tsx`, `TaskStackWrapper.tsx`, `TaskStack.stories.tsx`, `TaskStackWrapper.stories.tsx`, `frontend/tests/task-stack.test.tsx`, `frontend/tests/task-stack-wrapper.test.tsx`; update `frontend/src/index.ts` barrel exports (`TaskDeck`, `TaskDeckWrapper` + prop types) and any remaining references (done in US1 — the fixtures rename made the old files broken; verified no `TaskStack` references remain)
-- [ ] T024 [P] Update repo `README.md` with the Storybook usage, the exportable `TaskDeck` component (swipe/auto-rotate/loop), and the library-build/install note
-- [ ] T025 Run full quality gates: `pnpm format`, `pnpm lint`, `pnpm typecheck`, `pnpm test`
-- [ ] T026 Run `quickstart.md` validation end-to-end (Storybook stories, library build + publint/attw, in-app Deck | List)
+- [X] T024 [P] Update repo `README.md` with the Storybook usage, the exportable `TaskDeck` component (swipe/auto-rotate/loop), and the library-build/install note
+- [X] T025 Run full quality gates: `pnpm format`, `pnpm lint`, `pnpm typecheck`, `pnpm test`
+- [X] T026 Run `quickstart.md` validation end-to-end (Storybook stories, library build + publint/attw, in-app Deck | List)
 
 ---
 

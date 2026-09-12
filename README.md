@@ -42,17 +42,58 @@ pnpm db:migrate    # apply migrations (creates the SQLite database)
 | MCP server (HTTP) | `pnpm --filter backend start:mcp` | Streamable HTTP MCP at http://localhost:3001/mcp (`MCP_PORT`) |
 | MCP auto-reload (dev) | `pnpm --filter backend dev:mcp` | Same, but `tsx watch` reloads on source edits |
 | Frontend (dev) | `pnpm --filter frontend dev` | http://localhost:5173, proxies `/api` to the backend |
+| Storybook (workbench) | `pnpm --filter frontend storybook` | http://localhost:6006 · static build → `dist-storybook/` |
 | Both together | `pnpm dev` | REST + frontend via `concurrently` |
 
 Both backend modes share `backend/data/procrastinator.db` (SQLite WAL allows concurrent
 access). To run REST and MCP simultaneously, start two instances of the same process —
 which also means you can restart the MCP process without affecting the REST API.
 
+## Frontend: Storybook & the TaskDeck component
+
+The frontend ships a **Storybook workbench** (`pnpm --filter frontend storybook` →
+http://localhost:6006) for developing and documenting components in isolation. Stories are
+co-located with components; see [feature 003](specs/003-storybook-task-stack/).
+
+The **`TaskDeck`** component renders tasks as a **swipeable card stack** (Deck Standard 1
+style): the top card fully visible, the next `stackSize` cards scaled/fanned behind it. It
+supports drag-to-skip and an **auto-rotate** timer. Key props (see
+[contracts/task-deck.md](specs/003-storybook-task-stack/contracts/task-deck.md)):
+
+- `filters` — which tasks to show (fetched via the existing API client).
+- `refreshRateMs` (default 30000) — how often to re-fetch; `0` disables.
+- `autoRotateMs` (default 4000) — auto-advance interval; `0` disables; pauses during drag and
+  resets after a manual skip.
+- `slideDurationMs` (default 500) — swipe/exit animation duration.
+- `loop` (default true) — cycles back to the first task instead of showing an empty state.
+
+The app dashboard offers a **Deck | List** toggle: Deck renders `TaskDeckWrapper`
+(self-fetching), List renders the classic vertical task list.
+
+### Exportable package
+
+`pnpm --filter frontend build:lib` produces `frontend/dist-lib/` — an ESM bundle
+(`index.js` + `index.d.ts`) plus a compiled `styles.css`, so the component can be installed
+and used in other React 19 apps:
+
+```tsx
+import { TaskDeckWrapper } from '@procrastinator-tracker/frontend';
+import '@procrastinator-tracker/frontend/styles.css';
+
+<TaskDeckWrapper filters={{ status: 'started' }} autoRotateMs={5000} />;
+```
+
+`react`, `react-dom`, `motion`, and `lucide-react` are peer dependencies (consumers provide
+them). The package is ESM-only — CommonJS consumers use dynamic import. Validated with
+`npx publint` and `npx @arethetypeswrong/cli --pack`.
+
 ## Documentation
 
 - **Specs**: `specs/001-task-tracker-core/` — spec, plan, research, data-model, contracts,
   quickstart, tasks. `specs/002-mcp-http-transport/` — MCP HTTP transport (spec, plan,
-  research, contracts, quickstart, tasks).
+  research, contracts, quickstart, tasks). `specs/003-storybook-task-stack/` — Storybook
+  workbench + exportable TaskDeck component (spec, plan, research, data-model, contracts,
+  quickstart, tasks).
 - **API contract**: served at `/doc` (OpenAPI 3.0) with interactive Swagger UI at `/ui`.
 - **Endpoint validation**: VSCode REST Client files in `backend/http/*.http`.
 
