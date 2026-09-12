@@ -7,6 +7,9 @@ export default tseslint.config(
     ignores: [
       '**/node_modules/**',
       '**/dist/**',
+      '**/dist-app/**',
+      '**/dist-storybook/**',
+      '**/dist-lib/**',
       '**/build/**',
       '**/coverage/**',
       '**/drizzle/**',

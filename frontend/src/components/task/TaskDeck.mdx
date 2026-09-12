@@ -1,0 +1,43 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as TaskDeckStories from './TaskDeck.stories';
+
+<Meta of={TaskDeckStories} />
+
+# TaskDeck
+
+A swipeable card stack that renders tasks as a deck — the top card fully visible, with the
+next `stackSize` cards scaled and fanned behind it (Deck Standard 1 style). Drag the top card
+past the swipe threshold to advance the deck; it can also **auto-rotate** on a timer and
+**loop** forever.
+
+`TaskDeck` is the **presentational** component — it takes tasks as props and does no fetching.
+For a self-fetching version, see `TaskDeckWrapper`.
+
+## Default
+
+A deck of six tasks, ordered by urgency (unset urgency sorts last).
+
+<Canvas of={TaskDeckStories.Default} />
+
+## Filtered
+
+Only `in-progress` tasks — the `filters` prop is applied client-side for ordering/emphasis.
+
+<Canvas of={TaskDeckStories.Filtered} />
+
+## AutoRotating
+
+The deck advances automatically on `autoRotateMs` (2s in this story). The timer pauses during
+a drag and resets after a manual skip.
+
+<Canvas of={TaskDeckStories.AutoRotating} />
+
+## NoLoop
+
+With `loop` disabled, the deck stops at the last card instead of wrapping back to the first.
+
+<Canvas of={TaskDeckStories.NoLoop} />
+
+## Props
+
+<ArgTypes of={TaskDeckStories} />

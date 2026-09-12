@@ -1,0 +1,38 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as TaskCardStories from './TaskCard.stories';
+
+<Meta of={TaskCardStories} />
+
+# TaskCard
+
+A single task card used in the dashboard's vertical list view. It shows the task title, a
+status badge, and its meta (urgency, location, due date), tags, and assignees. The card links
+to the task detail page.
+
+## Default
+
+A representative task with a short description, tags, and an assignee.
+
+<Canvas of={TaskCardStories.Default} />
+
+## Urgent
+
+A high-urgency task (`urgency >= 4`) highlights its border in amber.
+
+<Canvas of={TaskCardStories.Urgent} />
+
+## WithDescription
+
+A task with a long description demonstrates the `line-clamp-2` ellipsis.
+
+<Canvas of={TaskCardStories.WithDescription} />
+
+## Minimal
+
+A bare task with no description, tags, or assignees shows the base layout.
+
+<Canvas of={TaskCardStories.Minimal} />
+
+## Props
+
+<ArgTypes of={TaskCardStories} />

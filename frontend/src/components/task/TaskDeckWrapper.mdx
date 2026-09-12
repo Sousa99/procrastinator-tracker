@@ -1,0 +1,27 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as TaskDeckWrapperStories from './TaskDeckWrapper.stories';
+
+<Meta of={TaskDeckWrapperStories} />
+
+# TaskDeckWrapper
+
+The **self-fetching** wrapper around `TaskDeck`: it owns retrieval through an injectable
+`dataSource` (default: the API client), re-fetches on `refreshRateMs`, and renders loading,
+error, and empty states around the deck. This is the component exported for installation in
+other products — the "full component with retrieval".
+
+## Default
+
+Fetches once (via a mocked `dataSource` in this story) and renders the swipeable deck.
+
+<Canvas of={TaskDeckWrapperStories.Default} />
+
+## AutoRotating
+
+The deck advances automatically on `autoRotateMs` (2s in this story).
+
+<Canvas of={TaskDeckWrapperStories.AutoRotating} />
+
+## Props
+
+<ArgTypes of={TaskDeckWrapperStories} />
