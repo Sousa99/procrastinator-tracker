@@ -22,10 +22,11 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create directory structure `.github/workflows/`, `deploy/`, `scripts/` per plan.md Project Structure
-- [ ] T002 [P] Add `esbuild` devDependency and `build` script (esbuild bundle `backend/src/index.ts` → `backend/dist/index.js` and `backend/scripts/migrate.ts` → `backend/dist/migrate.js`, ESM, `--packages=external`) in `backend/package.json`
-- [ ] T003 [P] Update `frontend/package.json`: remove `"private": true`, add `"repository": "https://github.com/Sousa99/procrastinator-tracker.git"` and `"publishConfig": { "registry": "https://npm.pkg.github.com/", "access": "restricted" }`
-- [ ] T004 [P] Add root devDependencies in `package.json`: `semantic-release`, `@semantic-release/changelog`, `@semantic-release/exec`, `@semantic-release/git` (commit-analyzer/release-notes-generator/npm/github ship with core)
+- [X] T001 Create directory structure `.github/workflows/`, `deploy/`, `scripts/` per plan.md Project Structure
+- [X] T002 [P] Add `esbuild` devDependency and `build` script (esbuild bundle `backend/src/index.ts` → `backend/dist/index.js` and `backend/scripts/migrate.ts` → `backend/dist/migrate.js`, ESM, `--packages=external`) in `backend/package.json`
+- [X] T003 [P] Update `frontend/package.json`: remove `"private": true`, add `"repository": "https://github.com/Sousa99/procrastinator-tracker.git"` and `"publishConfig": { "registry": "https://npm.pkg.github.com/", "access": "restricted" }`
+- [X] T004 [P] Add root devDependencies in `package.json`: `semantic-release`, `@semantic-release/changelog`, `@semantic-release/exec`, `@semantic-release/git` (commit-analyzer/release-notes-generator/npm/github ship with core)
+- [X] T031 [P] Create `.dockerignore` at repo root (exclude node_modules, .git, build outputs, data, env) — Docker build context hygiene
 
 ---
 
