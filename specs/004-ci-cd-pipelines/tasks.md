@@ -36,10 +36,12 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 [P] Create `backend/scripts/migrate.ts` — startup migration runner using `migrate()` from `drizzle-orm/better-sqlite3/migrator`; resolve the `drizzle/` folder relative to the bundle; use `DATABASE_URL`; add `scripts` to `backend/tsconfig.json` include
-- [ ] T006 [P] Create `deploy/nginx.spa.conf` — SPA-fallback server block (`try_files $uri $uri/ /index.html;`)
-- [ ] T007 Create `scripts/apply-release-version.mjs` — write `${nextRelease.version}` into `backend/package.json` and `frontend/package.json` (shared version sync)
-- [ ] T008 Checkpoint: `pnpm install` succeeds and `pnpm --filter backend build` emits `backend/dist/index.js` + `backend/dist/migrate.js`
+- [X] T005 [P] Create `backend/scripts/migrate.ts` — startup migration runner using `migrate()` from `drizzle-orm/better-sqlite3/migrator`; resolve the `drizzle/` folder relative to the bundle; use `DATABASE_URL`; add `scripts` to `backend/tsconfig.json` include
+- [X] T006 [P] Create `deploy/nginx.spa.conf` — SPA-fallback server block (`try_files $uri $uri/ /index.html;`)
+- [X] T007 Create `scripts/apply-release-version.mjs` — write `${nextRelease.version}` into `backend/package.json` and `frontend/package.json` (shared version sync)
+- [X] T008 Checkpoint: `pnpm install` succeeds and `pnpm --filter backend build` emits `backend/dist/index.js` + `backend/dist/migrate.js`
+- [X] T032 [P] Move `dotenv` from devDependencies to dependencies in `backend/package.json` (the prod bundle imports `dotenv/config` at runtime; dev deps are stripped from the image)
+- [X] T033 [P] Update `eslint.config.mjs` — add `globals` devDependency and a `**/*.{js,mjs,cjs}` block with `globals.node` so Node scripts lint cleanly
 
 **Checkpoint**: Foundation ready — user story implementation can begin.
 
