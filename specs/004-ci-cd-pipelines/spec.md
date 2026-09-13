@@ -17,6 +17,13 @@ PRs for the tile and branches for their format. any other relevant questions?"
 > "cd" and publishing under "ci". This was confirmed as a mix-up. The spec follows the
 > conventional split: **PR validation (CI)** and **publish-on-merge (CD)**.
 
+## Clarifications
+
+### Session 2026-09-13
+
+- Q: Should commit and PR titles carry a `[PT-XXXX]` ticket prefix? → A: No — remove the
+  ticket prefix; use plain conventional commits and normal semantic-release parsing.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Every PR is validated automatically before merge (Priority: P1)
@@ -105,8 +112,8 @@ title; confirm both checks fail with the expected format, then confirm they pass
 
 **Acceptance Scenarios**:
 
-1. **Given** a PR whose title does not match `[<TICKET-ID>] <type>: <subject>` (with `type`
-   in `{feat, fix, chore, docs, refactor, test, build, ci, style, perf, revert}`), **When**
+1. **Given** a PR whose title does not match `<type>(<scope>)?: <subject>` (with `type` in
+   `{feat, fix, chore, docs, refactor, test, build, ci, style, perf, revert}`), **When**
    the format check runs, **Then** the check fails and states the required format.
 2. **Given** a PR whose branch does not match `feature/NNN-kebab-case`, **When** the format
    check runs, **Then** the check fails and states the required format.
@@ -127,14 +134,14 @@ because it improves contributor experience and PR quality but does not block the
 pipeline itself.
 
 **Independent Test**: Open a PR and confirm the template appears with guidance comments for
-every section, a title example matching `[PT-NNN] feat: <subject>`, and a self-review
+every section, a title example matching `feat: <subject>`, and a self-review
 checklist; the guidance comments are invisible once rendered.
 
 **Acceptance Scenarios**:
 
 1. **Given** a repository with the PR template, **When** I open a new PR, **Then** the
-   template body appears with sections for summary, related ticket, changes, testing, proof,
-   and a self-review checklist.
+   template body appears with sections for summary, changes, testing, proof, and a
+   self-review checklist.
 2. **Given** the template, **When** I look at it, **Then** every section includes a hidden
    HTML comment explaining how to fill it in, and the top comment shows the required title
    format with an example.
@@ -148,8 +155,8 @@ checklist; the guidance comments are invisible once rendered.
 - What happens when publishing fails partway (e.g. the backend image publishes but the npm
   package does not)? The pipeline fails loudly; the next merge retries; each publish step
   must be idempotent so a re-run does not duplicate or corrupt existing artifacts.
-- What happens when a PR has no conventional type (e.g. `[PT-004] some change`)? The format
-  check rejects it before review.
+- What happens when a PR has no conventional type (e.g. `some change` without a `type:`)?
+  The format check rejects it before review.
 - How are prerelease / RC versions handled by semantic release and what tags/versions do the
   artifacts get?
 - What happens when multiple PRs merge in quick succession? Each merge produces its own
@@ -178,15 +185,14 @@ checklist; the guidance comments are invisible once rendered.
 - **FR-001**: Every pull request MUST be validated by an automated CI workflow that runs
   linting, formatting check, type checking, unit tests, the backend production build, the
   frontend SPA build, and the frontend library build; all checks MUST pass before merge.
-- **FR-002**: PR titles MUST match the format `[<TICKET-ID>] <type>: <subject>`, where
-  `<type>` is one of `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `build`, `ci`,
-  `style`, `perf`, `revert`, and `<TICKET-ID>` matches the ticket pattern (`PT-NNN`, e.g.
-  `[PT-003] feat: Storybook Task Stack`).
+- **FR-002**: PR titles MUST match the format `<type>(<scope>)?: <subject>`, where `<type>`
+  is one of `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `build`, `ci`, `style`,
+  `perf`, `revert` (conventional commits; no ticket prefix).
 - **FR-003**: Branch names MUST match the format `feature/NNN-kebab-case` (three-digit
   feature number followed by a kebab-case description).
 - **FR-004**: Merging to the main branch MUST trigger semantic release, which computes the
-  next version from the conventional-commit history (including the ticket-prefixed PR titles,
-  parsed via a custom commit header pattern).
+  next version from the conventional-commit history (using the default conventional-commits
+  parser).
 - **FR-005**: The backend MUST be published as a Docker image to GitHub Container Registry.
 - **FR-006**: The frontend SPA MUST be published as a Docker image to GitHub Container
   Registry.
@@ -207,10 +213,10 @@ checklist; the guidance comments are invisible once rendered.
   section), and any new contracts.
 - **FR-014**: The repository MUST include a pull request template that is easy and fun to
   fill out: it MUST provide sections with hidden HTML comments explaining how to fill in each
-  one (summary, related ticket, changes, testing, optional proof/screenshots, and a
+  one (summary, changes, testing, optional proof/screenshots, and a
   self-review checklist aligned with the quality gates: lint, format, tests, typecheck,
   docs). The template MUST reinforce the FR-002 title format with an example
-  (`[PT-NNN] feat: <subject>`), and the checklist MUST be guidance only — not a required
+  (`feat: <subject>`), and the checklist MUST be guidance only — not a required
   merge gate.
 - **FR-015**: The published Docker images MUST be built with multi-stage builds such that
   the final, published stage contains only the necessary built files (compiled output and
@@ -266,12 +272,9 @@ checklist; the guidance comments are invisible once rendered.
   authentication via a token available to the workflow.
 - Publishing happens on merge to `main` (not on tags); PRs only run validation.
 - PRs are squash-merged so the PR title becomes the commit message, which is what semantic
-  release analyzes. The release config uses a custom commit parser that extracts the
-  conventional type from the ticket-prefixed title (`feat` → minor, `fix` → patch,
-  `BREAKING CHANGE` → major).
+  release analyzes with its default conventional-commits parser (`feat` → minor, `fix` →
+  patch, `BREAKING CHANGE` → major).
 - One shared version is produced by a single semantic release run at the repository root.
-- The ticket pattern is `PT-NNN` (per the user's example `[PT-003]`) and is kept
-  configurable in the format validation.
 - The backend image does not bundle the SQLite data directory or local database state; the
   database is expected to be provided at runtime (volume/mount) as it is today with the
   local `backend/data/` directory.

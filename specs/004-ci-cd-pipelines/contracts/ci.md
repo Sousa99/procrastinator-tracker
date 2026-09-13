@@ -35,14 +35,12 @@ adding/removing jobs never requires re-editing branch protection.
 ## PR format rules (the `📝 PR format` job)
 
 - **Title** MUST match:
-  `^\[[A-Za-z]+-\d+\]\s*(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:\s*.+`
-  - Ticket pattern `[A-Za-z]+-\d+` (e.g. `[PT-003]`), conventional type (scope optional),
-    `: `, non-empty subject.
+  `^(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:\s*.+`
+  (conventional commit: type (scope optional), `: `, non-empty subject).
 - **Branch** MUST match:
   `^feature/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$`
   (three-digit feature number + kebab-case description).
 - On failure the job logs the expected format and exits non-zero (fails before review).
-- Ticket prefix pattern is kept in one regex constant so it can be tightened per project.
 
 ## Conventions (FR-016)
 

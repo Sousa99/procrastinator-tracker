@@ -71,7 +71,7 @@
 
 ### Implementation for User Story 2
 
-- [ ] T012 [US2] Create `.releaserc.json` — `branches: ["main"]`, `parserOpts.headerPattern` for `[PT-NNN] type: subject`, `releaseRules` (feat→minor, fix/perf/refactor→patch, breaking→major), plugin chain: commit-analyzer, release-notes-generator, changelog, exec `prepareCmd` (`scripts/apply-release-version.mjs ${nextRelease.version}`), npm (`pkgRoot: "frontend"`), git (commit `chore(release): ${nextRelease.version} [skip ci]`), exec `publishCmd` (`scripts/publish-artifacts.sh ${nextRelease.version}`), github
+- [ ] T012 [US2] Create `.releaserc.json` — `branches: ["main"]`, default `conventionalcommits` parsing (no custom `parserOpts`), `releaseRules` (feat→minor, fix/perf/refactor→patch, breaking→major), plugin chain: commit-analyzer, release-notes-generator, changelog, exec `prepareCmd` (`scripts/apply-release-version.mjs ${nextRelease.version}`), npm (`pkgRoot: "frontend"`), git (commit `chore(release): ${nextRelease.version} [skip ci]`), exec `publishCmd` (`scripts/publish-artifacts.sh ${nextRelease.version}`), github
 - [ ] T013 [US2] Create `scripts/publish-artifacts.sh` — `docker buildx build --push` both images (`Dockerfile.backend`, `Dockerfile.frontend`) tagged `$1` and `latest`; `PLATFORMS` env (default `linux/amd64`)
 - [ ] T014 [US2] Create `Dockerfile.backend` — multi-stage: build (install → `pnpm --filter backend build` → `pnpm --filter backend deploy --prod /out`) → `node:24-slim` runtime with `dist/`, `drizzle/`, prod `node_modules`; `DATABASE_URL`; entrypoint `node dist/migrate.js && node dist/index.js --http`
 - [ ] T015 [US2] Create `Dockerfile.frontend` — multi-stage: build (install → `pnpm --filter frontend build`) → `nginx:alpine` with `frontend/dist-app` + `deploy/nginx.spa.conf`
@@ -107,7 +107,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T022 [US4] Add `📝 PR format` job to `.github/workflows/ci.yml` — bash regex: title `^\[[A-Za-z]+-\d+\]\s*(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:\s*.+`; branch `^feature/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$`; exit 1 with the expected formats on mismatch; ticket prefix kept in one constant
+- [ ] T022 [US4] Add `📝 PR format` job to `.github/workflows/ci.yml` — bash regex: title `^(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:\s*.+`; branch `^feature/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$`; exit 1 with the expected formats on mismatch
 - [ ] T023 [US4] Verify PR format checks: invalid title/branch fail before review; valid pass (quickstart §1)
 - [ ] T024 [P] [US4] Document branch protection (single required check `✅ check` on `main`) in `contracts/ci.md` + `README.md`
 
@@ -123,7 +123,7 @@
 
 ### Implementation for User Story 5
 
-- [ ] T025 [US5] Create `.github/PULL_REQUEST_TEMPLATE.md` — title-format hint comment + commented sections (🎯 What's this about? / Ticket / 🧩 What changed? / ✅ How I verified / 📸 Proof optional) + guidance-only self-review checklist aligned with the quality gates
+- [ ] T025 [US5] Create `.github/PULL_REQUEST_TEMPLATE.md` — title-format hint comment (`feat: Short summary`) + commented sections (🎯 What's this about? / 🧩 What changed? / ✅ How I verified / 📸 Proof optional) + guidance-only self-review checklist aligned with the quality gates
 - [ ] T026 [US5] Verify template renders on a new PR with guidance comments hidden and checkboxes interactive (quickstart §3)
 
 **Checkpoint**: User Story 5 independently functional.

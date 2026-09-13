@@ -10,12 +10,12 @@ Add a complete CI/CD + release pipeline to the pnpm workspace monorepo. **PRs ar
 (CI)** by parallel, emoji-labeled checks (format, lint, typecheck, tests, backend build, SPA
 build, library build, PR title/branch format, actionlint) that must pass before merge.
 **Merging to `main` triggers a release (CD)**: a single semantic-release run derives one
-shared version from the ticket-prefixed conventional-commit history, then publishes all three
+shared version from the conventional-commit history, then publishes all three
 artifacts — the backend Docker image, the frontend SPA Docker image (both to GHCR via
 multi-stage builds) and the frontend npm package (to GitHub Packages) — all carrying the
 identical version. The backend image runs database migrations automatically and idempotently
 at container startup (no manual remote migration step). A fun, guided PR template
-(`[PT-NNN] feat: <subject>`) makes opening a PR self-explanatory.
+(`feat: <subject>`) makes opening a PR self-explanatory.
 
 Primary requirement: enforce quality gates mechanically on PRs; publish three synchronized
 artifacts on merge to main; validate PR title/branch format; add a guided PR template.
@@ -167,12 +167,14 @@ Resolve the integration specifics (full decisions in `research.md`):
   `prepareCmd` writes the version into both package.json files; `@semantic-release/git`
   commits the bump + changelog; `@semantic-release/npm` (`pkgRoot: frontend`) publishes the
   npm package; `@semantic-release/exec` `publishCmd` builds+pushes both Docker images.
-- **Commit parsing**: `parserOpts.headerPattern` regex strips `[PT-003] ` so conventional
-  types classify correctly; `BREAKING CHANGE` → major.
+- **Commit parsing**: default `conventionalcommits` parsing (no custom `parserOpts`); PR
+  titles are plain conventional commits (`feat` → minor, `fix` → patch,
+  `BREAKING CHANGE` → major).
 - **GitHub Packages npm**: scope `@procrastinator-tracker` + `repository` field (GitHub
   matches the repo by URL); `GITHUB_TOKEN` auth; first release will be `1.0.0`.
 - **PR/branch format**: bash regex in a `pr-format` job; title
-  `^\[[A-Za-z]+-\d+\]\s*(type)(\(scope\))?:\s*.+`, branch `^feature/\d{3}-[a-z0-9]+(-[a-z0-9]+)*$`.
+  `^(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:\s*.+`, branch
+  `^feature/\d{3}-[a-z0-9]+(-[a-z0-9]+)*$`.
 - **Startup migrations**: `drizzle-orm` runtime `migrate()`; idempotent; no drizzle-kit in
   the image; `DATABASE_URL` env + volume mount.
 

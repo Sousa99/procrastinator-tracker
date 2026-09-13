@@ -20,7 +20,7 @@ Open PRs against `main` and observe the `📝 PR format` check in `ci.yml`:
 - Push a branch named `test-branch` and open a PR titled `some random title` →
   **check fails** and logs the expected formats.
 - Rename the branch to `feature/004-ci-cd-pipelines` and retitle the PR to
-  `[PT-004] feat: Add CI/CD pipelines` → **check passes**.
+  `feat: Add CI/CD pipelines` → **check passes**.
 
 **Expected**: invalid titles/branches are rejected mechanically before review; valid ones pass.
 

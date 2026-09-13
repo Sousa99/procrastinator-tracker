@@ -110,23 +110,22 @@ pnpm's built-in `versioning.fixed` (pnpm ≥ 11.13; a second release system in a
 semantic-release — adds a release "source of truth", rejected for a personal project that
 already commits conventional commits).
 
-## 5. Commit parsing for ticket-prefixed titles
+## 5. Commit parsing (conventional commits, no custom parser)
 
-**Decision**: Configure `parserOpts.headerPattern` for both `@semantic-release/commit-analyzer`
-and `@semantic-release/release-notes-generator`:
-`^\[([A-Za-z]+-\d+)\]\s*(\w+)(?:\(([^)]+)\))?:\s*(.*)$` (group 2 = type). `releaseRules`
-map `feat` → minor, `fix`/`perf`/`refactor` → patch, `BREAKING CHANGE` → major. Squash-merged
-PRs carry the `[PT-NNN] feat: …` title into history, so the parser is what makes versioning
-work despite the ticket prefix.
+**Decision**: Use semantic-release's **default `conventionalcommits` parsing** — no custom
+`parserOpts`. Commit/PR titles are plain conventional commits (`feat: …`, `fix: …`), so the
+default `@semantic-release/commit-analyzer` and `@semantic-release/release-notes-generator`
+behaviour classifies `feat` → minor, `fix`/`perf`/`refactor` → patch, `BREAKING CHANGE` →
+major. Squash-merged PRs carry the conventional title into history, and versioning works with
+zero configuration.
 
-**Rationale**: semantic-release's default parser expects a conventional commit to **start**
-with the type; a `[PT-003]` prefix would be ignored (everything would classify as a patch).
-A custom header pattern is the supported, documented way to handle a project-specific header
-format.
+**Rationale**: The user removed the `[PT-XXXX]` ticket prefix (2026-09-13 clarification) —
+there is no project-specific header format anymore, so the default parser is exactly "normal
+semantic release", with no bespoke parser to maintain.
 
-**Alternatives considered**: Dropping the ticket prefix from commits (titles only) — not
-possible with squash-merge (the title becomes the message); pre-processing commit messages —
-unreliable and hidden.
+**Alternatives considered**: A custom `parserOpts.headerPattern` — unnecessary now that
+titles start with the conventional type; `amannn/action-semantic-pull-request` — not needed
+for parsing.
 
 ## 6. Publishing the npm package to GitHub Packages
 
@@ -160,19 +159,19 @@ Packages); renaming scope to `@sousa99` — changes feature 003's consumer contr
 **Decision**: A `pr-format` job in `ci.yml` (parallel, required) validates the PR using bash
 regex on `github.event.pull_request.title` and `github.head_ref` — no third-party action:
 
-- Title: `^\[[A-Za-z]+-\d+\]\s*(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:\s*.+`
+- Title: `^(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:\s*.+`
 - Branch: `^feature/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$`
 
-On mismatch the job prints the expected format and exits 1 (failing check). The regexes are
-kept in the workflow with the ticket pattern (`PT-NNN`) configurable via a single constant.
+On mismatch the job prints the expected format and exits 1 (failing check).
 
-**Rationale**: Third-party PR-title actions (`amannn/action-semantic-pull-request`) support
-custom types but not a `[TICKET]` prefix; a small, self-contained bash check is dependency-free,
-boring, and matches the constitution's minimal-tooling preference. The format check fails
-before review begins (spec FR-002/FR-003, SC-003).
+**Rationale**: With the ticket prefix removed, the title regex is the plain conventional-commit
+format; a small, self-contained bash check is dependency-free, boring, and matches the
+constitution's minimal-tooling preference. The format check fails before review begins (spec
+FR-002/FR-003, SC-003).
 
-**Alternatives considered**: `amannn/action-semantic-pull-request` — cannot parse the ticket
-prefix; a separate workflow file — same logic, more surface.
+**Alternatives considered**: `amannn/action-semantic-pull-request` — an extra third-party
+action that still would not cover the branch-format check, which the bash job handles in the
+same step; a separate workflow file — same logic, more surface.
 
 ## 8. Pipeline shape: parallelized, emoji-labeled CI
 
@@ -247,7 +246,7 @@ what the user wants to remove.
 | 2 | Backend image | Multi-stage: build (install → build → `pnpm deploy --prod`) → `node:24-slim` runtime with `dist/`, `drizzle/`, prod `node_modules`; entrypoint migrate-then-serve |
 | 3 | SPA image | Multi-stage: build (`pnpm --filter frontend build`) → `nginx:alpine` + `dist-app` + SPA-fallback conf |
 | 4 | Version sync | One semantic-release run at root; exec plugin writes version to both package.json; git commit-back; npm publish (pkgRoot frontend); exec publishes Docker |
-| 5 | Commit parsing | Custom `parserOpts.headerPattern` strips `[PT-003] `; feat→minor, fix/perf/refactor→patch, breaking→major |
+| 5 | Commit parsing | Default `conventionalcommits` parsing (no custom parser); plain conventional titles; feat→minor, fix/perf/refactor→patch, breaking→major |
 | 6 | npm registry | GitHub Packages npm; keep `@procrastinator-tracker` scope via `repository` field; non-private + `publishConfig.registry`; GITHUB_TOKEN |
 | 7 | PR/branch format | Bash regex `pr-format` job (title + branch); no third-party action |
 | 8 | CI shape | Parallel emoji jobs + `✅ check` aggregate required check; caching; concurrency cancel; actionlint |

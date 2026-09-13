@@ -21,10 +21,9 @@ Phase 1 output for `specs/004-ci-cd-pipelines`. Defines the merge-to-main releas
 ## Semantic-release config (`.releaserc.json`)
 
 - `branches`: `["main"]`.
-- **Commit parsing**: `parserOpts.headerPattern` =
-  `^\[([A-Za-z]+-\d+)\]\s*(\w+)(?:\(([^)]+)\))?:\s*(.*)$` for both the commit-analyzer and the
-  release-notes-generator, so the `[PT-NNN] ` prefix is stripped and the conventional type
-  classifies the release.
+- **Commit parsing**: the default `conventionalcommits` preset — no custom `parserOpts`. PR
+  titles are plain conventional commits, so the default commit-analyzer / release-notes-
+  generator classify the release.
 - `releaseRules`: `feat` → minor, `fix`/`perf`/`refactor` → patch, `BREAKING CHANGE` → major.
 
 ### Plugin chain (order matters)
