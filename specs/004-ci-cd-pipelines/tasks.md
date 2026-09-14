@@ -55,9 +55,9 @@
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] Create `.github/workflows/ci.yml` — `pull_request` trigger, `concurrency` cancel-in-progress, pnpm-store cache, parallel emoji-labeled jobs (🧹 Format, 🚨 Lint, 🔍 Typecheck, 🧪 Test, 🏗️ Build backend, 🖼️ Build SPA, 📦 Build library) with `::group::`/`::endgroup::` logs, plus a `✅ check` aggregator job (`needs:` all, no steps)
-- [ ] T010 [P] [US1] Add `🔬 actionlint` job to `.github/workflows/ci.yml` that lints `.github/workflows/*.yml`
-- [ ] T011 [US1] Verify US1: PR with deliberate lint/format/test failure is blocked; fixed PR is green (quickstart §2)
+- [X] T009 [US1] Create `.github/workflows/ci.yml` — `pull_request` trigger, `concurrency` cancel-in-progress, pnpm-store cache, parallel emoji-labeled jobs (🧹 Format, 🚨 Lint, 🔍 Typecheck, 🧪 Test, 🏗️ Build backend, 🖼️ Build SPA, 📦 Build library) with `::group::`/`::endgroup::` logs, plus a `✅ check` aggregator job (`needs:` all, no steps)
+- [X] T010 [P] [US1] Add `🔬 actionlint` job to `.github/workflows/ci.yml` that lints `.github/workflows/*.yml`
+- [ ] T011 [US1] Verify US1: PR with deliberate lint/format/test failure is blocked; fixed PR is green (quickstart §2) — pending live validation after push + GitHub MCP setup
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently.
 

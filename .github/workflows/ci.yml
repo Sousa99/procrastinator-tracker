@@ -1,0 +1,155 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    name: 🧹 Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: 📦 Install
+        run: |
+          echo "::group::pnpm install"
+          pnpm install --frozen-lockfile
+          echo "::endgroup::"
+      - name: 🧹 Prettier check
+        run: pnpm format
+
+  lint:
+    name: 🚨 Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: 📦 Install
+        run: |
+          echo "::group::pnpm install"
+          pnpm install --frozen-lockfile
+          echo "::endgroup::"
+      - name: 🚨 ESLint
+        run: pnpm lint
+
+  typecheck:
+    name: 🔍 Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: 📦 Install
+        run: |
+          echo "::group::pnpm install"
+          pnpm install --frozen-lockfile
+          echo "::endgroup::"
+      - name: 🔍 TypeScript check
+        run: pnpm typecheck
+
+  test:
+    name: 🧪 Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: 📦 Install
+        run: |
+          echo "::group::pnpm install"
+          pnpm install --frozen-lockfile
+          echo "::endgroup::"
+      - name: 🧪 Unit tests
+        run: pnpm test
+
+  build-backend:
+    name: 🏗️ Build backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: 📦 Install
+        run: |
+          echo "::group::pnpm install"
+          pnpm install --frozen-lockfile
+          echo "::endgroup::"
+      - name: 🏗️ esbuild bundle
+        run: pnpm --filter backend build
+
+  build-spa:
+    name: 🖼️ Build SPA
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: 📦 Install
+        run: |
+          echo "::group::pnpm install"
+          pnpm install --frozen-lockfile
+          echo "::endgroup::"
+      - name: 🖼️ Vite build
+        run: pnpm --filter frontend build
+
+  build-lib:
+    name: 📦 Build library
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: 📦 Install
+        run: |
+          echo "::group::pnpm install"
+          pnpm install --frozen-lockfile
+          echo "::endgroup::"
+      - name: 📦 Library build
+        run: pnpm --filter frontend build:lib
+
+  actionlint:
+    name: 🔬 actionlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 🔬 Check workflow files
+        uses: docker://rhysd/actionlint:latest
+
+  check:
+    name: ✅ Check
+    runs-on: ubuntu-latest
+    needs: [format, lint, typecheck, test, build-backend, build-spa, build-lib, actionlint]
+    steps:
+      - name: ✅ All required checks passed
+        run: echo "All required checks passed."
