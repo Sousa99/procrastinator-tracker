@@ -35,7 +35,7 @@ RUN corepack enable
 COPY . .
 RUN pnpm install --frozen-lockfile
 RUN pnpm --filter backend build
-RUN pnpm --filter backend deploy --prod /out
+RUN pnpm --filter backend deploy --prod --legacy /out
 
 FROM node:24-slim
 ENV NODE_ENV=production
@@ -49,12 +49,16 @@ CMD ["sh", "-c", "node dist/migrate.js && node dist/index.js --http"]
 ```
 
 **Rationale**: The build stage installs the whole workspace, produces the compiled bundle,
-and uses `pnpm --filter backend deploy --prod /out` to materialize a self-contained folder
+and uses `pnpm --filter backend deploy --prod --legacy /out` to materialize a self-contained folder
 with only the backend's **production** dependencies. The runtime stage copies just that +
 `dist/` + the `drizzle/` migration folder, so the published image contains compiled output,
 runtime deps, and migrations — no source, no dev tooling (FR-015). `node:24-slim` (Debian)
-is used because `better-sqlite3` ships prebuilt binaries for glibc; Alpine (musl) would need
-a C++ build toolchain in the build stage. Migrations run before the server starts
+is used because `better-sqlite3` works on glibc; Alpine (musl) would need more C++ toolchain
+friction. The build stage installs `python3 make g++` so `better-sqlite3` can compile from
+source when a prebuilt binary is unavailable (e.g. `linux/arm64`); the frontend build stage
+needs them too because the workspace-wide `pnpm install` also compiles the backend's native
+module. `pnpm deploy` requires `--legacy` in pnpm ≥ 10 unless
+`inject-workspace-packages` is enabled. Migrations run before the server starts
 (FR-017); `DATABASE_URL` is the runtime data path (default `./data/procrastinator.db`),
 with the data directory mounted as a volume (never baked into the image).
 
@@ -243,7 +247,7 @@ what the user wants to remove.
 | # | Question | Decision |
 |---|----------|----------|
 | 1 | Backend production build | esbuild bundle (`dist/index.js` + `dist/migrate.js`), `--packages=external` |
-| 2 | Backend image | Multi-stage: build (install → build → `pnpm deploy --prod`) → `node:24-slim` runtime with `dist/`, `drizzle/`, prod `node_modules`; entrypoint migrate-then-serve |
+| 2 | Backend image | Multi-stage: build (install → build → `pnpm deploy --prod --legacy`) → `node:24-slim` runtime with `dist/`, `drizzle/`, prod `node_modules`; entrypoint migrate-then-serve |
 | 3 | SPA image | Multi-stage: build (`pnpm --filter frontend build`) → `nginx:alpine` + `dist-app` + SPA-fallback conf |
 | 4 | Version sync | One semantic-release run at root; exec plugin writes version to both package.json; git commit-back; npm publish (pkgRoot frontend); exec publishes Docker |
 | 5 | Commit parsing | Default `conventionalcommits` parsing (no custom parser); plain conventional titles; feat→minor, fix/perf/refactor→patch, breaking→major |
