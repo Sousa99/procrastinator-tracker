@@ -106,7 +106,21 @@ pnpm test       # Vitest: backend (hono app + in-memory SQLite) + frontend (RTL)
 pnpm typecheck  # tsc --noEmit for both packages
 ```
 
-All four MUST pass before commit/merge (see the project constitution).
+All four MUST pass before commit/merge (see the project constitution). These gates (plus
+builds and the PR format checks) run automatically on every pull request via the `CI`
+workflow; merging to `main` triggers the `Release` workflow.
+
+## Pull requests
+
+- **Title** must be a conventional commit: `<type>(<scope>)?: <subject>` (e.g.
+  `feat: add CI/CD pipelines`) — `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `build`,
+  `ci`, `style`, `perf`, `revert`. A `📝 PR format` check rejects non-conforming titles and
+  branches before review.
+- **Branch** must be `feature/NNN-kebab-case` (e.g. `feature/004-ci-cd-pipelines`).
+- A single **`✅ Check`** status check aggregates all CI jobs and is the required check on
+  `main` (enable the branch protection rule in repo Settings → Branches).
+- A guided **pull request template** pre-fills every new PR body with hidden fill-in
+  instructions.
 
 ## MCP tools
 

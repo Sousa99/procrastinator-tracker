@@ -50,6 +50,23 @@ adding/removing jobs never requires re-editing branch protection.
 - Steps use `::group::`/`::endgroup::` around the long commands so logs are collapsible.
 - pnpm store is cached across jobs (`pnpm/action-setup` + `actions/setup-node` cache) to keep
   installs fast.
+- Workflow files use blank lines between jobs and between steps for readability; workflow YAML
+  is excluded from Prettier (`.prettierignore`) and linted by the `🔬 actionlint` job instead.
+
+## Branch protection
+
+To enforce the gate on `main`, configure a branch protection rule in the repo settings
+(Settings → Branches):
+
+- **Branch name pattern**: `main`.
+- **Require status checks to pass before merging**: require the **`✅ Check`** check — the
+  single aggregator that `needs:` all jobs (including `📝 PR format`). Optionally also enable
+  **Require branches to be up to date before merging** so CI re-runs after `main` moves.
+- **Require a pull request before merging** (recommended): nothing lands on `main` except via
+  a PR that has passed the checks.
+
+The `📝 PR format` job enforces the title/branch formats mechanically, so review effort is
+never spent on formatting.
 
 ## Success criteria this contract serves
 

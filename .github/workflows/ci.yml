@@ -15,141 +15,201 @@ jobs:
   format:
     name: 🧹 Format
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
+
       - name: 📦 Install
         run: |
           echo "::group::pnpm install"
           pnpm install --frozen-lockfile
           echo "::endgroup::"
+
       - name: 🧹 Prettier check
         run: pnpm format
 
   lint:
     name: 🚨 Lint
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
+
       - name: 📦 Install
         run: |
           echo "::group::pnpm install"
           pnpm install --frozen-lockfile
           echo "::endgroup::"
+
       - name: 🚨 ESLint
         run: pnpm lint
 
   typecheck:
     name: 🔍 Typecheck
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
+
       - name: 📦 Install
         run: |
           echo "::group::pnpm install"
           pnpm install --frozen-lockfile
           echo "::endgroup::"
+
       - name: 🔍 TypeScript check
         run: pnpm typecheck
 
   test:
     name: 🧪 Test
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
+
       - name: 📦 Install
         run: |
           echo "::group::pnpm install"
           pnpm install --frozen-lockfile
           echo "::endgroup::"
+
       - name: 🧪 Unit tests
         run: pnpm test
 
   build-backend:
     name: 🏗️ Build backend
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
+
       - name: 📦 Install
         run: |
           echo "::group::pnpm install"
           pnpm install --frozen-lockfile
           echo "::endgroup::"
+
       - name: 🏗️ esbuild bundle
         run: pnpm --filter backend build
 
   build-spa:
     name: 🖼️ Build SPA
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
+
       - name: 📦 Install
         run: |
           echo "::group::pnpm install"
           pnpm install --frozen-lockfile
           echo "::endgroup::"
+
       - name: 🖼️ Vite build
         run: pnpm --filter frontend build
 
   build-lib:
     name: 📦 Build library
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
+
       - name: 📦 Install
         run: |
           echo "::group::pnpm install"
           pnpm install --frozen-lockfile
           echo "::endgroup::"
+
       - name: 📦 Library build
         run: pnpm --filter frontend build:lib
 
   actionlint:
     name: 🔬 actionlint
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - name: 🔬 Check workflow files
         uses: docker://rhysd/actionlint:latest
+
+  pr-format:
+    name: 📝 PR format
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📝 Validate PR title and branch
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          TITLE_RE='^(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:[[:space:]]+.+'
+          BRANCH_RE='^feature/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$'
+          if [[ ! "$PR_TITLE" =~ $TITLE_RE ]]; then
+            echo "::error::PR title must match '<type>(<scope>)?: <subject>' (types: feat, fix, chore, docs, refactor, test, build, ci, style, perf, revert)."
+            exit 1
+          fi
+          if [[ ! "$HEAD_REF" =~ $BRANCH_RE ]]; then
+            echo "::error::Branch name must match 'feature/NNN-kebab-case'."
+            exit 1
+          fi
+          echo "✅ PR title and branch formats OK"
 
   check:
     name: ✅ Check
     runs-on: ubuntu-latest
-    needs: [format, lint, typecheck, test, build-backend, build-spa, build-lib, actionlint]
+    needs: [format, lint, typecheck, test, build-backend, build-spa, build-lib, actionlint, pr-format]
+
     steps:
       - name: ✅ All required checks passed
         run: echo "All required checks passed."

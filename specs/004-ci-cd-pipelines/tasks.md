@@ -107,9 +107,9 @@
 
 ### Implementation for User Story 4
 
-- [ ] T022 [US4] Add `📝 PR format` job to `.github/workflows/ci.yml` — bash regex: title `^(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:\s*.+`; branch `^feature/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$`; exit 1 with the expected formats on mismatch
-- [ ] T023 [US4] Verify PR format checks: invalid title/branch fail before review; valid pass (quickstart §1)
-- [ ] T024 [P] [US4] Document branch protection (single required check `✅ check` on `main`) in `contracts/ci.md` + `README.md`
+- [X] T022 [US4] Add `📝 PR format` job to `.github/workflows/ci.yml` — bash regex: title `^(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:\s*.+`; branch `^feature/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$`; exit 1 with the expected formats on mismatch; wired into the `✅ Check` aggregator `needs:`
+- [X] T023 [US4] Verify PR format checks: invalid title/branch fail before review; valid pass (quickstart §1) — local regex sanity confirmed (incl. old `[PT-1]` format now failing); GitHub pass on PR #2 pending push
+- [X] T024 [P] [US4] Document branch protection (single required check `✅ check` on `main`) in `contracts/ci.md` + `README.md` — added Branch protection + Pull requests sections
 
 **Checkpoint**: User Story 4 independently functional.
 
