@@ -9,7 +9,7 @@ if (!version) {
 }
 
 const target = resolve(new URL('..', import.meta.url).pathname);
-const packages = ['backend/package.json', 'frontend/package.json'];
+const packages = ['package.json', 'backend/package.json', 'frontend/package.json'];
 
 for (const pkg of packages) {
   const file = resolve(target, pkg);

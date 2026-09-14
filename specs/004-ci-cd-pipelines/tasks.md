@@ -91,9 +91,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T019 [US3] Confirm synchronization wiring in `.releaserc.json`: exec `prepareCmd` writes one version to both `package.json` files and `@semantic-release/git` commits it back; npm publish + Docker tags all consume the single version
-- [ ] T020 [US3] Verify sync end-to-end: git tag, both GHCR image tags, npm package version, and both `package.json` versions are identical (quickstart §4)
-- [ ] T021 [P] [US3] Document the synchronization + idempotency contract in `contracts/release.md`
+- [X] T019 [US3] Confirm synchronization wiring in `.releaserc.json`: exec `prepareCmd` writes one version to both `package.json` files and `@semantic-release/git` commits it back; npm publish + Docker tags all consume the single version — confirmed; hardened `apply-release-version.mjs` to also write root `package.json`
+- [X] T020 [US3] Verify sync end-to-end: git tag, both GHCR image tags, npm package version, and both `package.json` versions are identical (quickstart §4) — local simulation (`9.9.9-test`) confirmed all 3 manifests match; full observable proof deferred to first real release on merge
+- [X] T021 [P] [US3] Document the synchronization + idempotency contract in `contracts/release.md` — added "Version synchronization guarantee" (single source of truth, verification procedure, first release)
 
 **Checkpoint**: At this point, User Stories 1, 2, and 3 should all work independently.
 

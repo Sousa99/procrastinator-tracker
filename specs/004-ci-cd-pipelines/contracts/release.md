@@ -42,8 +42,31 @@ Phase 1 output for `specs/004-ci-cd-pipelines`. Defines the merge-to-main releas
 
 **Version synchronization (FR-008)**: one semantic-release run produces a single version that
 becomes (a) the npm package version, (b) the Docker image tags, (c) the git tag `vX.Y.Z`, and
-(d) the version written back into both `package.json` files — backend and frontend can never
-drift.
+(d) the version written back into **all three** `package.json` files (root, backend, frontend)
+— backend and frontend can never drift.
+
+### Version synchronization guarantee
+
+- **Single source of truth**: one semantic-release run at the repo root computes
+  `nextRelease.version`; `@semantic-release/exec` `prepareCmd` runs
+  `scripts/apply-release-version.mjs ${nextRelease.version}`, which writes the identical
+  version into `package.json`, `backend/package.json`, and `frontend/package.json`.
+- **Everything consumes the same value**: the npm package version (set by `@semantic-release/npm`
+  in `frontend/`), the Docker image tags (`scripts/publish-artifacts.sh ${nextRelease.version}`),
+  and the git tag `v${nextRelease.version}` (created by core).
+- **Committed together**: `@semantic-release/git` commits `CHANGELOG.md` + all three
+  `package.json` files (`chore(release): X.Y.Z [skip ci]`), so the repo always reflects the
+  released version.
+- **Release rules** come from the default `conventionalcommits` preset: `feat` → minor,
+  `fix`/`perf`/`refactor` → patch, `BREAKING CHANGE` → major.
+
+**How to verify (SC-002)**:
+- Locally (mechanism): `node scripts/apply-release-version.mjs <test-version>` then confirm all
+  three `package.json` files match; restore with `git checkout --`.
+- After a release: `git ls-remote --tags origin 'v*'` (tag), `gh api` image versions on GHCR
+  (`procrastinator-tracker-backend`, `procrastinator-tracker-frontend`), and
+  `npm view @procrastinator-tracker/frontend versions --registry=https://npm.pkg.github.com/`
+  must all show the identical version.
 
 **First release**: semantic-release derives the baseline from git tags; the first release on
 `main` will be **`1.0.0`**, overwriting the current `0.1.0` package versions (documented in
