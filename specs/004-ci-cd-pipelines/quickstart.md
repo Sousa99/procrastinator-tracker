@@ -112,6 +112,11 @@ npm install @procrastinator-tracker/frontend@X.Y.Z
 **Expected**: the published version installs and the wrapper imports (peer deps supplied by
 the consumer).
 
+> **Deferred until the first real release**: §3 (PR template live render), §4 (merge →
+> release → three synchronized artifacts), and §7 (npm install from GitHub Packages) require
+> an actual release, which happens when the feature-004 PR merges to `main`. Everything else
+> (§1/§2 validated live on PR #2; §5/§6 image + migration checks) is validated.
+
 ## Gate: full quality checks (pre-merge)
 
 ```bash

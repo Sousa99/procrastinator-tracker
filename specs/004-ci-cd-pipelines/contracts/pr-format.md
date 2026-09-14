@@ -66,6 +66,8 @@ body stays clean (FR-014).
   The CI `✅ check` is the enforcement mechanism.
 - The template is fun and light in tone but stays concise (per user request).
 - Guidance comments are invisible on render; checkboxes remain interactive.
+- Live-render verification (SC-006) is deferred to the next real PR, at the user's request;
+  the file itself passed structural validation (balanced comments, checkboxes, sections).
 
 ## Success criteria this contract serves
 

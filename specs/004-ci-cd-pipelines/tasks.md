@@ -134,10 +134,10 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T027 [P] Update `README.md` — CI/CD + release section (CI-enforced quality gates, release flow, PR title/branch format, PR template)
-- [ ] T028 [P] Align `contracts/ci.md`, `contracts/release.md`, `contracts/pr-format.md` with the implemented workflows
-- [ ] T029 Run the full `quickstart.md` validation end-to-end (PR gate, release, images, migrations, npm install)
-- [ ] T030 Final gates: `pnpm format`, `pnpm lint`, `pnpm typecheck`, `pnpm test` all green
+- [X] T027 [P] Update `README.md` — CI/CD + release section (CI-enforced quality gates, release flow, PR title/branch format, PR template) — added "CI/CD & releases" + feature 004 in Documentation
+- [X] T028 [P] Align `contracts/ci.md`, `contracts/release.md`, `contracts/pr-format.md` with the implemented workflows — aggregator "single trivial step", `[[:space:]]` regex, plugin publish order, live-render note
+- [X] T029 Run the full `quickstart.md` validation end-to-end (PR gate, release, images, migrations, npm install) — §5/§6 re-validated locally (runtime-only images, migration fresh+no-op, SPA fallback); §3/§4/§7 marked deferred until first release
+- [X] T030 Final gates: `pnpm format`, `pnpm lint`, `pnpm typecheck`, `pnpm test` all green — all pass (backend 39, frontend 25 tests)
 
 ---
 

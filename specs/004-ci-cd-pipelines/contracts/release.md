@@ -33,11 +33,11 @@ Phase 1 output for `specs/004-ci-cd-pipelines`. Defines the merge-to-main releas
 | analyze | `@semantic-release/commit-analyzer` | compute next version from history |
 | notes | `@semantic-release/release-notes-generator` | generate release notes |
 | prepare (changelog) | `@semantic-release/changelog` | write/update `CHANGELOG.md` |
-| prepare (version) | `@semantic-release/exec` `prepareCmd` | `node scripts/apply-release-version.mjs ${nextRelease.version}` → writes the version into `backend/package.json` and `frontend/package.json` |
+| prepare (version) | `@semantic-release/exec` `prepareCmd` | `node scripts/apply-release-version.mjs ${nextRelease.version}` → writes the version into all three `package.json` files (root, backend, frontend) |
 | prepare (npm) | `@semantic-release/npm` (`pkgRoot: frontend`) | updates the frontend package version (idempotent with the exec write) |
 | git | `@semantic-release/git` | commits version bumps + changelog back to `main` with `[skip ci]` (message `chore(release): ${nextRelease.version}`) |
+| publish (docker) | `@semantic-release/exec` `publishCmd` | `scripts/publish-artifacts.sh ${nextRelease.version}` → `docker buildx build --push` both images (exec runs before npm in the plugin array) |
 | publish (npm) | `@semantic-release/npm` (`pkgRoot: frontend`) | publishes `@procrastinator-tracker/frontend` to GitHub Packages |
-| publish (docker) | `@semantic-release/exec` `publishCmd` | `scripts/publish-artifacts.sh ${nextRelease.version}` → `docker buildx build --push` both images |
 | publish (github) | `@semantic-release/github` | creates the GitHub Release with notes |
 
 **Version synchronization (FR-008)**: one semantic-release run produces a single version that

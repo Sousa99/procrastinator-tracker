@@ -28,14 +28,15 @@ independent — jobs run in parallel and each reports its own status (FR-016).
 
 ## Aggregate required check
 
-A final **`✅ check`** job has no steps and `needs:` every job above. Branch protection
-requires only this single check (plus the format rule is enforced inside the pipeline), so
-adding/removing jobs never requires re-editing branch protection.
+A final **`✅ check`** job `needs:` every job above and runs a single trivial confirmation
+step (`echo "All required checks passed."`). Branch protection requires only this one check
+(plus the format rule is enforced inside the pipeline), so adding/removing jobs never
+requires re-editing branch protection.
 
 ## PR format rules (the `📝 PR format` job)
 
 - **Title** MUST match:
-  `^(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:\s*.+`
+  `^(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:[[:space:]]+.+`
   (conventional commit: type (scope optional), `: `, non-empty subject).
 - **Branch** MUST match:
   `^feature/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$`

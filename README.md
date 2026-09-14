@@ -93,7 +93,8 @@ them). The package is ESM-only — CommonJS consumers use dynamic import. Valida
   quickstart, tasks. `specs/002-mcp-http-transport/` — MCP HTTP transport (spec, plan,
   research, contracts, quickstart, tasks). `specs/003-storybook-task-stack/` — Storybook
   workbench + exportable TaskDeck component (spec, plan, research, data-model, contracts,
-  quickstart, tasks).
+  quickstart, tasks). `specs/004-ci-cd-pipelines/` — CI/CD + release automation (spec, plan,
+  research, data-model, contracts, quickstart, tasks).
 - **API contract**: served at `/doc` (OpenAPI 3.0) with interactive Swagger UI at `/ui`.
 - **Endpoint validation**: VSCode REST Client files in `backend/http/*.http`.
 
@@ -121,6 +122,28 @@ workflow; merging to `main` triggers the `Release` workflow.
   `main` (enable the branch protection rule in repo Settings → Branches).
 - A guided **pull request template** pre-fills every new PR body with hidden fill-in
   instructions.
+
+## CI/CD & releases
+
+The repository ships two GitHub Actions workflows (`.github/workflows/`):
+
+- **CI** — on every pull request. Parallel emoji-labeled checks: 🧹 Format, 🚨 Lint,
+  🔍 Typecheck, 🧪 Test, 🏗️ Build backend, 🖼️ Build SPA, 📦 Build library, 🔬 actionlint
+  (lints the workflows), and 📝 PR format (title + branch). A single **`✅ Check`** aggregator
+  is the required status check on `main`.
+- **Release** — on push to `main` (or manual dispatch). Runs the quality gates, then
+  semantic-release computes the next version from conventional-commit history and publishes
+  three artifacts at the **same version** (all `package.json` files are kept in sync):
+  - **Backend image** → `ghcr.io/sousa99/procrastinator-tracker-backend` (multi-stage,
+    `node:24-slim`, runs SQLite migrations on startup)
+  - **SPA image** → `ghcr.io/sousa99/procrastinator-tracker-frontend` (`nginx:alpine`,
+    serves the static build)
+  - **npm package** → `@procrastinator-tracker/frontend` on GitHub Packages
+    (`npm.pkg.github.com`)
+
+A `CHANGELOG.md` and a GitHub release are generated for every release; the version bump is
+committed back to `main` as `chore(release): X.Y.Z [skip ci]`. See
+[feature 004](specs/004-ci-cd-pipelines/) for the full spec, contracts, and quickstart.
 
 ## MCP tools
 
