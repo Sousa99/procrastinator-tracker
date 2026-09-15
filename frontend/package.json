@@ -1,8 +1,12 @@
 {
   "name": "@procrastinator-tracker/frontend",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
+  "repository": "https://github.com/Sousa99/procrastinator-tracker.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/",
+    "access": "restricted"
+  },
   "engines": {
     "node": ">=24.0.0"
   },
