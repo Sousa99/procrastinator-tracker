@@ -1,5 +1,11 @@
 # Feature Specification: Storybook + Exportable TaskDeck Component
 
+> **Supersession pointer (2026-09-14)**: The published npm package described here as
+> `@procrastinator-tracker/frontend` was **renamed to
+> `@sousa99/procrastinator-tracker-components`** during feature 004's release work — GitHub
+> Packages requires the npm scope to match the repository owner, so the original name cannot
+> be published. The component design in this spec is unchanged.
+
 **Feature Branch**: `feature/003-storybook-task-stack`
 
 **Created**: 2026-09-06

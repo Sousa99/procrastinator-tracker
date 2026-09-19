@@ -28,6 +28,9 @@ PRs for the tile and branches for their format. any other relevant questions?"
 
 - Q: Should bug-fix branches be allowed? → A: Yes — branch names MAY be either
   `feature/NNN-kebab-case` or `fix/NNN-kebab-case` (wider branch format for fixes).
+- Q: The npm package scope `@procrastinator-tracker` was rejected by GitHub Packages
+  (`403 owner not found`)? → A: Rename the package to `@sousa99/procrastinator-tracker-components`
+  (account-scoped namespace + project-unique name).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -202,7 +205,8 @@ checklist; the guidance comments are invisible once rendered.
 - **FR-006**: The frontend SPA MUST be published as a Docker image to GitHub Container
   Registry.
 - **FR-007**: The frontend MUST be published as an npm package to GitHub Packages (npm
-  registry), scoped as `@procrastinator-tracker`.
+  registry), named `@sousa99/procrastinator-tracker-components` (account-scoped because
+  GitHub Packages namespaces must match the repo owner).
 - **FR-008**: All three published artifacts (backend image, SPA image, npm package) MUST
   carry the identical version number.
 - **FR-009**: Release notes / changelog entries MUST be generated automatically for every

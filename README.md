@@ -77,8 +77,8 @@ The app dashboard offers a **Deck | List** toggle: Deck renders `TaskDeckWrapper
 and used in other React 19 apps:
 
 ```tsx
-import { TaskDeckWrapper } from '@procrastinator-tracker/frontend';
-import '@procrastinator-tracker/frontend/styles.css';
+import { TaskDeckWrapper } from '@sousa99/procrastinator-tracker-components';
+import '@sousa99/procrastinator-tracker-components/styles.css';
 
 <TaskDeckWrapper filters={{ status: 'started' }} autoRotateMs={5000} />;
 ```
@@ -139,7 +139,7 @@ The repository ships two GitHub Actions workflows (`.github/workflows/`):
     `node:24-slim`, runs SQLite migrations on startup)
   - **SPA image** → `ghcr.io/sousa99/procrastinator-tracker-frontend` (`nginx:alpine`,
     serves the static build)
-  - **npm package** → `@procrastinator-tracker/frontend` on GitHub Packages
+  - **npm package** → `@sousa99/procrastinator-tracker-components` on GitHub Packages
     (`npm.pkg.github.com`)
 
 A `CHANGELOG.md` and a GitHub release are generated for every release; the version bump is

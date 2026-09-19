@@ -37,7 +37,7 @@ Phase 1 output for `specs/004-ci-cd-pipelines`. Defines the merge-to-main releas
 | prepare (npm) | `@semantic-release/npm` (`pkgRoot: frontend`) | updates the frontend package version (idempotent with the exec write) |
 | git | `@semantic-release/git` | commits version bumps + changelog back to `main` with `[skip ci]` (message `chore(release): ${nextRelease.version}`) |
 | publish (docker) | `@semantic-release/exec` `publishCmd` | `scripts/publish-artifacts.sh ${nextRelease.version}` → `docker buildx build --push` both images (exec runs before npm in the plugin array) |
-| publish (npm) | `@semantic-release/npm` (`pkgRoot: frontend`) | publishes `@procrastinator-tracker/frontend` to GitHub Packages |
+| publish (npm) | `@semantic-release/npm` (`pkgRoot: frontend`) | publishes `@sousa99/procrastinator-tracker-components` to GitHub Packages |
 | publish (github) | `@semantic-release/github` | creates the GitHub Release with notes |
 
 **Version synchronization (FR-008)**: one semantic-release run produces a single version that
@@ -65,7 +65,7 @@ becomes (a) the npm package version, (b) the Docker image tags, (c) the git tag 
   three `package.json` files match; restore with `git checkout --`.
 - After a release: `git ls-remote --tags origin 'v*'` (tag), `gh api` image versions on GHCR
   (`procrastinator-tracker-backend`, `procrastinator-tracker-frontend`), and
-  `npm view @procrastinator-tracker/frontend versions --registry=https://npm.pkg.github.com/`
+  `npm view @sousa99/procrastinator-tracker-components versions --registry=https://npm.pkg.github.com/`
   must all show the identical version.
 
 **First release**: semantic-release derives the baseline from git tags; the first release on
@@ -78,7 +78,7 @@ becomes (a) the npm package version, (b) the Docker image tags, (c) the git tag 
 |----------|-----------------|------|------|
 | Backend image | `ghcr.io/sousa99/procrastinator-tracker-backend` | `<version>`, `latest` | `GITHUB_TOKEN` (packages: write) |
 | SPA image | `ghcr.io/sousa99/procrastinator-tracker-frontend` | `<version>`, `latest` | `GITHUB_TOKEN` (packages: write) |
-| npm package | `@procrastinator-tracker/frontend` @ `npm.pkg.github.com` | `<version>` (dist-tag `latest`) | `NODE_AUTH_TOKEN` = `GITHUB_TOKEN` |
+| npm package | `@sousa99/procrastinator-tracker-components` @ `npm.pkg.github.com` | `<version>` (dist-tag `latest`) | `NODE_AUTH_TOKEN` = `GITHUB_TOKEN` |
 
 - `publish-artifacts.sh` builds with buildx and `--push` (idempotent re-push of the same
   version), default platform `linux/amd64`; a `PLATFORMS` variable enables

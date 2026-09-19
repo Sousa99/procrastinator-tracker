@@ -133,30 +133,33 @@ for parsing.
 
 ## 6. Publishing the npm package to GitHub Packages
 
-**Decision**: Publish `@procrastinator-tracker/frontend` to the GitHub Packages npm registry
-(`npm.pkg.github.com`). `frontend/package.json`: remove `"private": true`, add
+**Decision**: Publish **`@sousa99/procrastinator-tracker-components`** to the GitHub Packages
+npm registry (`npm.pkg.github.com`). `frontend/package.json`: remove `"private": true`, set
+the `name` to the account-scoped project-unique package name, add
 `"repository": "https://github.com/Sousa99/procrastinator-tracker.git"` and
 `"publishConfig": { "registry": "https://npm.pkg.github.com/", "access": "restricted" }`.
-The release workflow sets `NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}` and a scope mapping
-(`@procrastinator-tracker:registry=https://npm.pkg.github.com/`) so `@semantic-release/npm`
-targets GitHub Packages. Permissions: `contents: write`, `packages: write`.
+The release workflow sets `NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}` and the `.npmrc` scope
+mapping (`@sousa99:registry=https://npm.pkg.github.com/`) so `@semantic-release/npm` targets
+GitHub Packages. Permissions: `contents: write`, `packages: write`.
 
-**Rationale**: GitHub Packages requires scoped packages and normally matches a package to a
-repo via the package scope matching the owner; because the scope (`@procrastinator-tracker`)
-does not equal the account (`Sousa99`), the **`repository` field is used — GitHub matches the
-package to the repo by URL instead of by name**. This lets us keep the existing package
-identity from feature 003 without a rename. `access: restricted` keeps the package private
-(installable only with auth), matching the private-repo default. The `npmPublish` default for
+**Rationale**: GitHub Packages npm namespaces are **GitHub account/organization scopes** — the
+`@scope` must resolve to a real user or org. The original name `@procrastinator-tracker/frontend`
+was **rejected at publish with `403 Permission not_found: owner not found`**: the `repository`
+field did NOT let us bypass the namespace requirement (the first release attempt proved this).
+The fix is an account-scoped name with a project-unique package name
+(`@sousa99/procrastinator-tracker-components`) so the namespace resolves and the package is
+identifiable per project (no generic `@sousa99/frontend` collision). `access: restricted`
+keeps the package private (installable only with auth). The `npmPublish` default for
 `private: true` packages is `false`, so removing `private` is required for publish at all.
 
-**Contingency** (documented, not expected): if GitHub still rejects the scope mismatch, the
-fallback is renaming the package to `@sousa99/frontend` (or `@sousa99/procrastinator-tracker-frontend`)
-— a breaking change to the package identity that we only take if the `repository`-field path
-is not honored.
+**Contingency (resolved 2026-09-14)**: the earlier plan tried to keep the feature-003 package
+identity via the `repository` field; GitHub Packages did not honor it for a non-owner scope, so
+the package was renamed to the account-scoped, project-unique name above. A true
+repo-scoped namespace would require a GitHub **organization** owning the repo (heavier; not
+taken).
 
 **Alternatives considered**: npmjs.org — user explicitly said "both to ghcr" (= GitHub
-Packages); renaming scope to `@sousa99` — changes feature 003's consumer contract
-(`@procrastinator-tracker/frontend`), avoided via the `repository` field.
+Packages); a GitHub org named to match the scope — requires repo transfer, not taken.
 
 ## 7. PR title & branch format validation
 

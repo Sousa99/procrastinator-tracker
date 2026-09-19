@@ -51,7 +51,7 @@ The publishable npm package of the frontend library build.
 
 | Field | Type | Rules |
 |-------|------|-------|
-| `name` | string | `@procrastinator-tracker/frontend` (unchanged from feature 003) |
+| `name` | string | `@sousa99/procrastinator-tracker-components` (GitHub Packages requires the scope to match the repo owner; the package name is project-unique) |
 | `registry` | string | `https://npm.pkg.github.com/` (GitHub Packages) |
 | `version` | semver | identical to the Release version (FR-008) |
 | `access` | string | `restricted` (private by default) |

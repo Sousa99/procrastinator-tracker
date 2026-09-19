@@ -58,7 +58,7 @@ gh api /user/packages/container/procrastinator-tracker-backend/versions --pagina
 gh api /user/packages/container/procrastinator-tracker-frontend/versions --paginate
 
 # npm package on GitHub Packages:
-npm view @procrastinator-tracker/frontend versions --registry=https://npm.pkg.github.com/
+npm view @sousa99/procrastinator-tracker-components versions --registry=https://npm.pkg.github.com/
 ```
 
 **Expected**: one tag `vX.Y.Z`; both images published at `X.Y.Z` (and `latest`); the npm
@@ -103,10 +103,10 @@ In a scratch project authenticated to GitHub Packages (`@procrastinator-tracker:
 `//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}`):
 
 ```bash
-npm install @procrastinator-tracker/frontend@X.Y.Z
+npm install @sousa99/procrastinator-tracker-components@X.Y.Z
 # and in a React 19 app:
-#   import { TaskDeckWrapper } from '@procrastinator-tracker/frontend';
-#   import '@procrastinator-tracker/frontend/styles.css';
+#   import { TaskDeckWrapper } from '@sousa99/procrastinator-tracker-components';
+#   import '@sousa99/procrastinator-tracker-components/styles.css';
 ```
 
 **Expected**: the published version installs and the wrapper imports (peer deps supplied by
