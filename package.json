@@ -1,6 +1,6 @@
 {
   "name": "procrastinator-tracker",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Local-first task tracker with REST + MCP backend and a React SPA frontend",
   "packageManager": "pnpm@11.25.0",
