@@ -24,6 +24,11 @@ PRs for the tile and branches for their format. any other relevant questions?"
 - Q: Should commit and PR titles carry a `[PT-XXXX]` ticket prefix? → A: No — remove the
   ticket prefix; use plain conventional commits and normal semantic-release parsing.
 
+### Session 2026-09-14
+
+- Q: Should bug-fix branches be allowed? → A: Yes — branch names MAY be either
+  `feature/NNN-kebab-case` or `fix/NNN-kebab-case` (wider branch format for fixes).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Every PR is validated automatically before merge (Priority: P1)
@@ -188,8 +193,8 @@ checklist; the guidance comments are invisible once rendered.
 - **FR-002**: PR titles MUST match the format `<type>(<scope>)?: <subject>`, where `<type>`
   is one of `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `build`, `ci`, `style`,
   `perf`, `revert` (conventional commits; no ticket prefix).
-- **FR-003**: Branch names MUST match the format `feature/NNN-kebab-case` (three-digit
-  feature number followed by a kebab-case description).
+- **FR-003**: Branch names MUST match the format `feature/NNN-kebab-case` or
+  `fix/NNN-kebab-case` (three-digit feature number followed by a kebab-case description).
 - **FR-004**: Merging to the main branch MUST trigger semantic release, which computes the
   next version from the conventional-commit history (using the default conventional-commits
   parser).

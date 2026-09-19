@@ -28,17 +28,19 @@ Examples: `feat: Add CI/CD pipelines`, `fix: correct schema mapping`, `chore: up
 ## Branch format (FR-003)
 
 ```
-feature/NNN-kebab-case
+feature/NNN-kebab-case   (features)
+fix/NNN-kebab-case       (fixes)
 ```
 
 Regex:
 
 ```
-^feature/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$
+^(feature|fix)/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$
 ```
 
 - Three-digit feature number matching the `specs/NNN-…` directory, then a kebab-case
-  description. Example: `feature/004-ci-cd-pipelines`.
+  description. Example: `feature/004-ci-cd-pipelines` (features), `fix/004-release-npm-token`
+  (fixes).
 
 ## PR template (`.github/PULL_REQUEST_TEMPLATE.md`)
 

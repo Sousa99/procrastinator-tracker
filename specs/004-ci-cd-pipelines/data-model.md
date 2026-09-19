@@ -98,7 +98,7 @@ published ──(npm package + Docker images pushed, git tag + commit back)─�
 ## Validation rules (from spec FRs)
 
 - PR title MUST match `^(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:\s*.+` (FR-002).
-- Branch MUST match `^feature/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$` (FR-003).
+- Branch MUST match `^(feature|fix)/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$` (FR-003).
 - Artifact versions MUST be identical to the Release `version` (FR-008).
 - Published images MUST contain only runtime files (FR-015) — verified by inspecting the image.
 - Startup migration MUST be idempotent (FR-017): fresh volume → full migrate; existing volume

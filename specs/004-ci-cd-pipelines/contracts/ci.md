@@ -39,8 +39,9 @@ requires re-editing branch protection.
   `^(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:[[:space:]]+.+`
   (conventional commit: type (scope optional), `: `, non-empty subject).
 - **Branch** MUST match:
-  `^feature/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$`
-  (three-digit feature number + kebab-case description).
+  `^(feature|fix)/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$`
+  (three-digit feature number + kebab-case description; `feature/…` for features,
+  `fix/…` for fixes).
 - On failure the job logs the expected format and exits non-zero (fails before review).
 
 ## Conventions (FR-016)

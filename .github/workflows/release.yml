@@ -60,6 +60,7 @@ jobs:
     permissions:
       contents: write
       packages: write
+      issues: write
 
     steps:
       - uses: actions/checkout@v4
@@ -93,5 +94,5 @@ jobs:
       - name: 🚀 Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm exec semantic-release
