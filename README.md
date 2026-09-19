@@ -117,7 +117,8 @@ workflow; merging to `main` triggers the `Release` workflow.
   `feat: add CI/CD pipelines`) — `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `build`,
   `ci`, `style`, `perf`, `revert`. A `📝 PR format` check rejects non-conforming titles and
   branches before review.
-- **Branch** must be `feature/NNN-kebab-case` (e.g. `feature/004-ci-cd-pipelines`).
+- **Branch** must be `feature/NNN-kebab-case` or `fix/NNN-kebab-case` (e.g.
+  `feature/004-ci-cd-pipelines`, `fix/004-release-npm-token`).
 - A single **`✅ Check`** status check aggregates all CI jobs and is the required check on
   `main` (enable the branch protection rule in repo Settings → Branches).
 - A guided **pull request template** pre-fills every new PR body with hidden fill-in

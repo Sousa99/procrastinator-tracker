@@ -194,7 +194,7 @@ jobs:
           HEAD_REF: ${{ github.head_ref }}
         run: |
           TITLE_RE='^(feat|fix|chore|docs|refactor|test|build|ci|style|perf|revert)(\([^)]+\))?:[[:space:]]+.+'
-          BRANCH_RE='^feature/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$'
+          BRANCH_RE='^(feature|fix)/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$'
           if [[ ! "$PR_TITLE" =~ $TITLE_RE ]]; then
             echo "::error::PR title must match '<type>(<scope>)?: <subject>' (types: feat, fix, chore, docs, refactor, test, build, ci, style, perf, revert)."
             exit 1
