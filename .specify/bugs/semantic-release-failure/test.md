@@ -4,7 +4,14 @@
 - **Tested**: 2026-09-14
 - **Assessment**: ./assessment.md
 - **Fix**: ./fix.md
-- **Result**: partial
+- **Result**: verified
+
+> **Updated 2026-09-14**: The deferred real-run check is now satisfied. The `Release`
+> workflow completed successfully on `main` (commit `f2d3098`) and published all three
+> artifacts at **1.0.0** — git tag `v1.0.0`, GHCR backend + frontend images, and
+> `@sousa99/procrastinator-tracker-components@1.0.0` on GitHub Packages (SC-002: identical
+> version everywhere). This bug is closed; the npm scope mismatch that surfaced during this
+> work was tracked separately as `npm-publish-403`.
 
 ## Summary
 
