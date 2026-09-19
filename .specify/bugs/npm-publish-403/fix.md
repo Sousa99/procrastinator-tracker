@@ -59,6 +59,23 @@ the previous name failed with `403 owner not found` even with the `repository` f
 - The package name uses the user-chosen project name `procrastinator-tracker-components`
   (not `frontend`) to reflect that the package is the component library.
 
+## Regression discovered & fixed (2026-09-14, second run)
+
+The rename broke every `pnpm --filter frontend` reference: pnpm bare-name filters match the
+**package name**, and the frontend package is no longer named `…/frontend`, so the filter
+silently matched nothing (`No projects matched the filters`, pnpm exits 0). This broke the
+frontend Docker build (`Dockerfile.frontend`) and silently no-op'd the CI/release "Build SPA"
+and "Build library" steps.
+
+**Fix**: switched all `pnpm --filter frontend`/`--filter backend` to **directory filters**
+(`--filter ./frontend`, `--filter ./backend`) across `.github/workflows/{ci,release}.yml`,
+`Dockerfile.{frontend,backend}`, root `package.json` scripts, `README.md`, and the feature-004
+contracts/plan/research docs. Directory filters are rename-proof.
+
+**Verified**: `pnpm --filter ./frontend build` → `dist-app/` produced; `pnpm --filter ./backend
+build` → `dist/` produced; `docker build -f Dockerfile.frontend` succeeds and serves
+`index.html`. Stale `v1.0.0` tag deleted again (clean 1.0.0 re-release).
+
 ## Follow-ups
 
 - Verify the real release run (all three artifacts at `1.0.0`) and close this bug.

@@ -158,10 +158,10 @@ Resolve the integration specifics (full decisions in `research.md`):
 - **Backend production build**: esbuild bundle (`src/index.ts` → `dist/index.js`, ESM,
   `--packages=external`) + a second entry for `scripts/migrate.ts` → `dist/migrate.js`.
   `tsc` emit is not viable for the repo's extensionless ESM imports.
-- **Multi-stage Docker images**: backend (build: install → `pnpm --filter backend build` →
-  `pnpm --filter backend deploy --prod --legacy /out`; runtime: `node:24-slim` + `dist/` +
+- **Multi-stage Docker images**: backend (build: install → `pnpm --filter ./backend build` →
+  `pnpm --filter ./backend deploy --prod --legacy /out`; runtime: `node:24-slim` + `dist/` +
   `drizzle/` + entrypoint `node dist/migrate.js && node dist/index.js --http`); frontend
-  (build: install → `pnpm --filter frontend build`; runtime: `nginx:alpine` + `dist-app` +
+  (build: install → `pnpm --filter ./frontend build`; runtime: `nginx:alpine` + `dist-app` +
   SPA-fallback conf).
 - **Single shared version**: one semantic-release run at root; `@semantic-release/exec`
   `prepareCmd` writes the version into both package.json files; `@semantic-release/git`

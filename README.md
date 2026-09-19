@@ -38,11 +38,11 @@ pnpm db:migrate    # apply migrations (creates the SQLite database)
 
 | Mode | Command | Notes |
 |------|---------|-------|
-| REST API + Swagger | `pnpm --filter backend start` | http://localhost:3000 · OpenAPI at `/doc` · Swagger UI at `/ui` |
-| MCP server (HTTP) | `pnpm --filter backend start:mcp` | Streamable HTTP MCP at http://localhost:3001/mcp (`MCP_PORT`) |
-| MCP auto-reload (dev) | `pnpm --filter backend dev:mcp` | Same, but `tsx watch` reloads on source edits |
-| Frontend (dev) | `pnpm --filter frontend dev` | http://localhost:5173, proxies `/api` to the backend |
-| Storybook (workbench) | `pnpm --filter frontend storybook` | http://localhost:6006 · static build → `dist-storybook/` |
+| REST API + Swagger | `pnpm --filter ./backend start` | http://localhost:3000 · OpenAPI at `/doc` · Swagger UI at `/ui` |
+| MCP server (HTTP) | `pnpm --filter ./backend start:mcp` | Streamable HTTP MCP at http://localhost:3001/mcp (`MCP_PORT`) |
+| MCP auto-reload (dev) | `pnpm --filter ./backend dev:mcp` | Same, but `tsx watch` reloads on source edits |
+| Frontend (dev) | `pnpm --filter ./frontend dev` | http://localhost:5173, proxies `/api` to the backend |
+| Storybook (workbench) | `pnpm --filter ./frontend storybook` | http://localhost:6006 · static build → `dist-storybook/` |
 | Both together | `pnpm dev` | REST + frontend via `concurrently` |
 
 Both backend modes share `backend/data/procrastinator.db` (SQLite WAL allows concurrent
@@ -51,7 +51,7 @@ which also means you can restart the MCP process without affecting the REST API.
 
 ## Frontend: Storybook & the TaskDeck component
 
-The frontend ships a **Storybook workbench** (`pnpm --filter frontend storybook` →
+The frontend ships a **Storybook workbench** (`pnpm --filter ./frontend storybook` →
 http://localhost:6006) for developing and documenting components in isolation. Stories are
 co-located with components; see [feature 003](specs/003-storybook-task-stack/).
 
@@ -72,7 +72,7 @@ The app dashboard offers a **Deck | List** toggle: Deck renders `TaskDeckWrapper
 
 ### Exportable package
 
-`pnpm --filter frontend build:lib` produces `frontend/dist-lib/` — an ESM bundle
+`pnpm --filter ./frontend build:lib` produces `frontend/dist-lib/` — an ESM bundle
 (`index.js` + `index.d.ts`) plus a compiled `styles.css`, so the component can be installed
 and used in other React 19 apps:
 
@@ -167,7 +167,7 @@ The repo's `opencode.json` registers the tracker as a **remote** MCP server:
 }
 ```
 
-Start the MCP process (`pnpm --filter backend start:mcp` or `dev:mcp`), then opencode
+Start the MCP process (`pnpm --filter ./backend start:mcp` or `dev:mcp`), then opencode
 connects on its next start. **Reloading MCP code needs no opencode restart**: restart the
 MCP process (or let `dev:mcp` reload on save) and opencode picks it up on the next tool
 call. See [feature 002 contracts](specs/002-mcp-http-transport/contracts/mcp.md).

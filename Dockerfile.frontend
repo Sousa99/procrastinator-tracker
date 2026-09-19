@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3 make g+
   && rm -rf /var/lib/apt/lists/*
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter frontend build
+RUN pnpm --filter ./frontend build
 
 FROM nginx:alpine
 COPY --from=build /app/frontend/dist-app /usr/share/nginx/html

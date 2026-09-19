@@ -125,7 +125,7 @@ jobs:
           echo "::endgroup::"
 
       - name: 🏗️ esbuild bundle
-        run: pnpm --filter backend build
+        run: pnpm --filter ./backend build
 
   build-spa:
     name: 🖼️ Build SPA
@@ -148,7 +148,7 @@ jobs:
           echo "::endgroup::"
 
       - name: 🖼️ Vite build
-        run: pnpm --filter frontend build
+        run: pnpm --filter ./frontend build
 
   build-lib:
     name: 📦 Build library
@@ -171,7 +171,7 @@ jobs:
           echo "::endgroup::"
 
       - name: 📦 Library build
-        run: pnpm --filter frontend build:lib
+        run: pnpm --filter ./frontend build:lib
 
   actionlint:
     name: 🔬 actionlint

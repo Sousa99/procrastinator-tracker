@@ -45,13 +45,13 @@ jobs:
         run: pnpm test
 
       - name: 🏗️ Build backend
-        run: pnpm --filter backend build
+        run: pnpm --filter ./backend build
 
       - name: 🖼️ Build SPA
-        run: pnpm --filter frontend build
+        run: pnpm --filter ./frontend build
 
       - name: 📦 Build library
-        run: pnpm --filter frontend build:lib
+        run: pnpm --filter ./frontend build:lib
 
   release:
     name: 🚀 Release

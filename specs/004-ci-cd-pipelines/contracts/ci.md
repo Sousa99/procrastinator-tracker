@@ -20,9 +20,9 @@ independent — jobs run in parallel and each reports its own status (FR-016).
 | 🚨 Lint | `pnpm lint` | ESLint (constitution III) |
 | 🔍 Typecheck | `pnpm typecheck` | `tsc --noEmit` both packages |
 | 🧪 Test | `pnpm test` | Vitest: backend + frontend |
-| 🏗️ Build backend | `pnpm --filter backend build` | esbuild bundle (`dist/index.js`, `dist/migrate.js`) |
-| 🖼️ Build SPA | `pnpm --filter frontend build` | `tsc --noEmit && vite build` → `dist-app/` |
-| 📦 Build library | `pnpm --filter frontend build:lib` | library build → `dist-lib/` |
+| 🏗️ Build backend | `pnpm --filter ./backend build` | esbuild bundle (`dist/index.js`, `dist/migrate.js`) |
+| 🖼️ Build SPA | `pnpm --filter ./frontend build` | `tsc --noEmit && vite build` → `dist-app/` |
+| 📦 Build library | `pnpm --filter ./frontend build:lib` | library build → `dist-lib/` |
 | 📝 PR format | bash regex (see below) | title + branch format (FR-002/FR-003) |
 | 🔬 actionlint | `actionlint` on `.github/workflows/*.yml` | lints the pipeline itself |
 

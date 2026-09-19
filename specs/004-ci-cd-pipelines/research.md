@@ -34,8 +34,8 @@ WORKDIR /app
 RUN corepack enable
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter backend build
-RUN pnpm --filter backend deploy --prod --legacy /out
+RUN pnpm --filter ./backend build
+RUN pnpm --filter ./backend deploy --prod --legacy /out
 
 FROM node:24-slim
 ENV NODE_ENV=production
@@ -49,7 +49,7 @@ CMD ["sh", "-c", "node dist/migrate.js && node dist/index.js --http"]
 ```
 
 **Rationale**: The build stage installs the whole workspace, produces the compiled bundle,
-and uses `pnpm --filter backend deploy --prod --legacy /out` to materialize a self-contained folder
+and uses `pnpm --filter ./backend deploy --prod --legacy /out` to materialize a self-contained folder
 with only the backend's **production** dependencies. The runtime stage copies just that +
 `dist/` + the `drizzle/` migration folder, so the published image contains compiled output,
 runtime deps, and migrations — no source, no dev tooling (FR-015). `node:24-slim` (Debian)
@@ -75,7 +75,7 @@ WORKDIR /app
 RUN corepack enable
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter frontend build        # tsc --noEmit && vite build -> frontend/dist-app
+RUN pnpm --filter ./frontend build        # tsc --noEmit && vite build -> frontend/dist-app
 
 FROM nginx:alpine
 COPY --from=build /app/frontend/dist-app /usr/share/nginx/html
@@ -251,7 +251,7 @@ what the user wants to remove.
 |---|----------|----------|
 | 1 | Backend production build | esbuild bundle (`dist/index.js` + `dist/migrate.js`), `--packages=external` |
 | 2 | Backend image | Multi-stage: build (install → build → `pnpm deploy --prod --legacy`) → `node:24-slim` runtime with `dist/`, `drizzle/`, prod `node_modules`; entrypoint migrate-then-serve |
-| 3 | SPA image | Multi-stage: build (`pnpm --filter frontend build`) → `nginx:alpine` + `dist-app` + SPA-fallback conf |
+| 3 | SPA image | Multi-stage: build (`pnpm --filter ./frontend build`) → `nginx:alpine` + `dist-app` + SPA-fallback conf |
 | 4 | Version sync | One semantic-release run at root; exec plugin writes version to both package.json; git commit-back; npm publish (pkgRoot frontend); exec publishes Docker |
 | 5 | Commit parsing | Default `conventionalcommits` parsing (no custom parser); plain conventional titles; feat→minor, fix/perf/refactor→patch, breaking→major |
 | 6 | npm registry | GitHub Packages npm; keep `@procrastinator-tracker` scope via `repository` field; non-private + `publishConfig.registry`; GITHUB_TOKEN |
